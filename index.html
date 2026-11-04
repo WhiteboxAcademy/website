@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whitebox Academy</title>
+<meta name="description" content="Whitebox Academy teaches how technology really works. Build it yourself and see every part. Our first course: build an AI agent from scratch.">
+<meta property="og:title" content="Whitebox Academy">
+<meta property="og:description" content="Open the black box. Learn how technology really works by building it yourself.">
+<meta property="og:url" content="https://whiteboxacademy.in/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://whiteboxacademy.in/">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a black box hero opens onto a white page. */
+:root {
+  --bg: #fbfbf9; --surface: #ffffff; --ink: #16181d; --muted: #5d616b; --rule: #d9dade;
+  --accent: #2a4bd7; --tint: #e7ebfb; --box: #0c0d10; --on-box: #fbfbf9; --box-muted: #a9adb8; --door: #1c1e25;
+  --display: "Bricolage Grotesque", Georgia, serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #111318; --surface: #191c23; --ink: #e9eaee; --muted: #a4a8b3; --rule: #2e323c; --accent: #9db1ff; --tint: #20274a; --box: #050507; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1.0625rem/1.65 var(--body); }
+.gutter { padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+.wrap { max-width: 68rem; margin: 0 auto; min-width: 0; }
+h1, h2, h3 { font-family: var(--display); margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(3rem, 8vw, 5.6rem); line-height: 1; font-weight: 700; letter-spacing: -0.02em; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); line-height: 1.1; font-weight: 700; letter-spacing: -0.01em; }
+h3 { font-size: 1.25rem; line-height: 1.3; font-weight: 700; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+.label { font: 600 0.8rem/1.2 var(--mono); color: var(--accent); }
+
+.hero { background: var(--box); color: var(--on-box); padding-block: 1.6rem 4.5rem; }
+.hero a:focus-visible { outline-color: var(--on-box); }
+nav { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 0.6rem; font: 500 1.1rem var(--display); }
+.brand i { width: 1rem; height: 1rem; border: 3px solid currentColor; display: block; }
+nav ul { list-style: none; display: flex; gap: 1.4rem; margin: 0; padding: 0; font-size: 0.95rem; }
+nav a { color: var(--on-box); text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: 3rem; align-items: center; padding-top: 4rem; }
+.hero-copy { display: grid; gap: 1.4rem; min-width: 0; }
+.dek { font-size: 1.3rem; line-height: 1.45; color: var(--box-muted); max-width: 34rem; }
+.actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+.button { display: inline-block; padding: 0.75rem 1.2rem; font-weight: 600; text-decoration: none; border: 2px solid var(--on-box); }
+.button.primary { background: var(--on-box); color: #16181d; }
+.button.ghost { color: var(--on-box); }
+
+.box { position: relative; aspect-ratio: 1; width: 100%; max-width: 21rem; justify-self: end; background: #fbfbf9; border: 3px solid #fbfbf9; overflow: hidden; display: grid; place-items: center; }
+.box pre { margin: 0; font: 600 clamp(0.95rem, 1.8vw, 1.15rem)/1.7 var(--mono); color: #16181d; }
+.door { position: absolute; top: 0; bottom: 0; width: 50%; background: var(--door); animation: 1.8s cubic-bezier(.7, 0, .2, 1) .5s both; }
+.door.left { left: 0; animation-name: open-left; }
+.door.right { right: 0; animation-name: open-right; }
+@keyframes open-left { to { transform: translateX(-100%); } }
+@keyframes open-right { to { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .door { animation: none; display: none; } }
+
+main section { padding-block: 4.5rem 0; display: grid; gap: 1.8rem; }
+.intro { max-width: 42rem; display: grid; gap: 0.9rem; min-width: 0; }
+.lede { font-size: 1.15rem; }
+.compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.compare > div { padding: 1.8rem; display: grid; gap: 0.7rem; align-content: start; min-width: 0; }
+.compare .black { background: var(--box); color: var(--on-box); }
+.compare .white { background: var(--surface); border: 2px solid var(--ink); }
+.compare ul { margin: 0; padding-left: 1.15rem; display: grid; gap: 0.3rem; }
+
+.facts { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.facts span { font: 500 0.88rem/1 var(--mono); padding: 0.55rem 0.7rem; background: var(--tint); }
+.parts { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--ink); }
+.parts li { display: grid; grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 1.6fr); gap: 1rem; padding: 0.95rem 0; border-bottom: 1px solid var(--rule); }
+.parts .num { font: 600 0.88rem/1.7 var(--mono); color: var(--muted); }
+.parts strong { font-weight: 600; }
+.parts .topics { color: var(--muted); font-size: 0.98rem; }
+
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.6rem; }
+.steps > div { border-top: 3px solid var(--ink); padding-top: 0.9rem; display: grid; gap: 0.35rem; align-content: start; min-width: 0; }
+
+.follow { background: var(--tint); padding: 2rem; display: grid; gap: 1rem; }
+footer { margin-top: 4.5rem; padding-block: 1.4rem 2.4rem; border-top: 1px solid var(--rule); font-size: 0.88rem; color: var(--muted); }
+
+@media (max-width: 760px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); padding-top: 2.6rem; }
+  .box { max-width: 15rem; justify-self: start; }
+  .compare, .steps { grid-template-columns: minmax(0, 1fr); }
+  .parts li { grid-template-columns: minmax(0, 1fr); gap: 0.1rem; }
+}
+</style>
+</head>
+<body>
+<header class="hero gutter">
+  <div class="wrap">
+    <nav aria-label="Main">
+      <span class="brand"><i></i>Whitebox Academy</span>
+      <ul>
+        <li><a href="#course">Course</a></li>
+        <li><a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a></li>
+        <li><a href="https://github.com/WhiteboxAcademy">GitHub</a></li>
+      </ul>
+    </nav>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <h1>Open the black box.</h1>
+        <p class="dek">Learn how technology really works by building it yourself, from the first line of code.</p>
+        <div class="actions">
+          <a class="button primary" href="#course">See the first course</a>
+          <a class="button ghost" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+        </div>
+      </div>
+      <div class="box" aria-hidden="true"><pre>model
++ tools
++ loop</pre><i class="door left"></i><i class="door right"></i></div>
+    </div>
+  </div>
+</header>
+
+<main class="gutter">
+  <div class="wrap">
+    <section>
+      <div class="intro">
+        <span class="label">Why Whitebox</span>
+        <h2>Don’t just use it. Understand it.</h2>
+      </div>
+      <div class="compare">
+        <div class="black">
+          <h3>A black box</h3>
+          <ul><li>You can use it.</li><li>You can’t see how it works.</li><li>When it breaks, you’re stuck.</li></ul>
+        </div>
+        <div class="white">
+          <h3>A white box</h3>
+          <ul><li>You can see every part.</li><li>You know why it works.</li><li>You can fix it, change it and build your own.</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="course">
+      <div class="intro">
+        <span class="label">First course</span>
+        <h2>Build an AI Agent from Scratch</h2>
+        <p class="lede">Start with basic Python. Finish with your own agent framework and a coding agent that fixes bugs on its own. You don’t need any experience with AI.</p>
+      </div>
+      <div class="facts"><span>35 chapters</span><span>About 85 hours</span><span>Self-paced</span><span>In production</span></div>
+      <ol class="parts">
+        <li><span class="num">Part 0</span><strong>Setup and Python primer</strong><span class="topics">Everything you need from Python, with a way to skip it if you know it</span></li>
+        <li><span class="num">Part 1</span><strong>LLM foundations</strong><span class="topics">Tokens, model calls, prompting and structured output</span></li>
+        <li><span class="num">Part 2</span><strong>The first agent</strong><span class="topics">Tool calling and the agent loop</span></li>
+        <li><span class="num">Part 3</span><strong>From script to framework</strong><span class="topics">Pluggable models, tools, tracing, reliability and evals</span></li>
+        <li><span class="num">Part 4</span><strong>RAG</strong><span class="topics">Embeddings, vector search and better retrieval</span></li>
+        <li><span class="num">Part 5</span><strong>Agent capabilities</strong><span class="topics">Context, memory, planning and durable execution</span></li>
+        <li><span class="num">Part 6</span><strong>MCP</strong><span class="topics">Build an MCP server and client</span></li>
+        <li><span class="num">Part 7</span><strong>Multi-agent and production</strong><span class="topics">Multi-agent systems, security, model switching and cost</span></li>
+        <li><span class="num">Part 8</span><strong>Capstone</strong><span class="topics">Build a coding agent, then compare with real-world frameworks</span></li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="intro">
+        <span class="label">How you learn</span>
+        <h2>Watch it, read it, build it</h2>
+      </div>
+      <div class="steps">
+        <div><h3>Watch</h3><p>Each module has a short captioned video that opens with a 30-second recap.</p></div>
+        <div><h3>Read</h3><p>Each article walks through real code and the output it really produced.</p></div>
+        <div><h3>Build</h3><p>Exercises check themselves, so you know when you’ve got it right.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="follow">
+        <h2>The first chapters are on the way</h2>
+        <p>Follow the channel to catch each module as it’s released. The course code will be openly available on GitHub.</p>
+        <div class="actions">
+          <a class="button primary" style="border-color:var(--ink);background:var(--ink);color:var(--bg)" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+          <a class="button" style="border-color:var(--ink);color:var(--ink)" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework">View the code</a>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 Whitebox Academy. Course code is under the MIT License. Articles and videos are under CC BY 4.0.</p>
+    </footer>
+  </div>
+</main>
+</body>
+</html>
