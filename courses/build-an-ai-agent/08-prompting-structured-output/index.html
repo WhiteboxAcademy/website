@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prompting and structured output | Whitebox Academy</title>
+<meta name="description" content="Learn the fundamentals of prompt engineering, then get replies your code can trust.">
+<meta property="og:title" content="Prompting and structured output">
+<meta property="og:description" content="Learn the fundamentals of prompt engineering, then get replies your code can trust.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/08-prompting-structured-output/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/08-prompting-structured-output/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/08-prompting-structured-output">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 08 of 34 · Part 1: LLM foundations · About 2.5 hours</p>
+      <h1>Prompting and structured output</h1>
+      <p class="lede">Learn the fundamentals of prompt engineering, then get replies your code can trust.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/08-prompting-structured-output">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/02-parts.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 4 minutes 31 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>What you ask shapes what you get</h2>
+        <p class="lede">A model predicts text, so the text you give it shapes what comes back. Prompt engineering is the skill of writing that text well, and it’s mostly clear writing and careful testing.</p>
+        <p><a href="/courses/build-an-ai-agent/00-setup/#start-ollama">Start Ollama</a>, activate the <code>.venv</code> from chapter 05, and run <code>python3 prompts.py</code> from <code>chapters/08-prompting-structured-output/code</code>. It takes a few minutes. It uses your <code>chat</code> function from chapter 06, with one new parameter, <code>format</code>.</p>
+      </div>
+      <pre><span class="cmd">$ python3 prompts.py</span>
+1. Be specific
+  Vague: 4056 characters, starting "Certainly! Coffee is one of the world's most "
+  Specific: Sip into Kolkata's soul at Java Junction.
+2. Show examples
+  No examples:   Classification: Bug Report / User Feedback
+  With examples: bug
+3. Ask for steps
+  Answer only: 0/5 correct
+  Step by step: 5/5 correct
+4. Separate instructions from data
+  Plain: 5/5 hacked
+  Tagged: 5/5 hacked
+5. Ask for JSON in words
+  Valid JSON: 0/5
+  A reply: '```json\n{\n  "customer": "Asha",\n  "product": "coffee",\n  "quantity": 2,\n  "price": 120\n}\n```'
+6. Use a schema
+  Valid JSON: 5/5
+  A reply: {'customer': 'Asha', 'product': 'coffees', 'quantity': 2, 'price': 120}
+7. The right shape can still be wrong
+  Guessed: {'customer': 'Someone', 'product': 'tea', 'quantity': 1, 'price': 0}
+  Honest:  {'customer': None, 'product': 'tea', 'quantity': None, 'price': None}</pre>
+      <p class="col">This is real output from <code>qwen2.5:7b</code>. Some of yours will differ.</p>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">First half</span>
+        <h2>Prompt engineering fundamentals</h2>
+        <p>Most good prompts include some of these parts. You don’t always need all five. Put lasting rules in a <code>system</code> message, and the specific request in a <code>user</code> message.</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">Part</th><th scope="col">What it says</th><th scope="col">Example</th></tr></thead>
+          <tbody>
+            <tr><td>Task</td><td>What to do</td><td>Write a sign for a coffee shop</td></tr>
+            <tr><td>Context</td><td>Background the model needs</td><td>The shop is in Kolkata</td></tr>
+            <tr><td>Format</td><td>The shape of the reply</td><td>One sentence</td></tr>
+            <tr><td>Constraints</td><td>Limits and rules</td><td>Use under 10 words</td></tr>
+            <tr><td>Examples</td><td>What a good result looks like</td><td>Message: I need a refund. Label: billing</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="col">Before each experiment, predict what will happen.</p>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Be specific</h3><p>The vague prompt gave over 4,000 characters, and the specific one gave exactly what we asked for. Anything you leave out, the model has to guess.</p></div>
+          <img src="media/03-specific.jpg" alt="A vague and a specific prompt, with very different replies" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Show examples</h3><p>Without examples, the model invented its own format. With three examples, it replied with a clean label. This is called few-shot prompting.</p></div>
+          <img src="media/04-examples.jpg" alt="A classifier with and without examples" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Ask for steps</h3><p>The correct answer is 503. Asking for only the number got 0 of 5 right, and asking for steps got 5 of 5. Written steps become text the model can read before its next step. This is called chain-of-thought prompting. For exact math, an agent should still use a calculator tool.</p></div>
+          <img src="media/05-steps.jpg" alt="Results showing 0 of 5 correct with answer only, and 5 of 5 step by step" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Separate instructions from data</h3><p>This review hides an instruction, which is called prompt injection. Tags make your prompt clearer, but they didn’t stop this attack: the model was hacked in 5 of 5 runs either way. Don’t rely on a prompt for security. You’ll learn real defenses in chapter 30.</p></div>
+          <img src="media/06-injection.jpg" alt="A prompt injection succeeding with and without tags" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="col">
+        <h3>Improving a prompt</h3>
+        <p>A prompt is rarely right the first time, so treat it like code: run it on real examples, look at what went wrong, change one thing, then run it again and count the results. In testing for this chapter, a classifier scored 4 of 7 with no label definitions, and 7 of 7 once we defined each label.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Second half</span>
+        <h2>Structured output</h2>
+        <p>An agent’s code needs data it can read, not a friendly paragraph.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Ask for JSON in words</h3><p>It failed in 5 of 5 runs. The JSON was fine, but the model wrapped it in a code fence, and <code>json.loads</code> can’t read that. A prompt alone doesn’t guarantee a format.</p></div>
+          <img src="media/07-json.jpg" alt="A reply wrapped in a code fence, with 0 of 5 valid" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Write a schema</h3><p>A JSON schema describes the shape your data must have: its fields and their types. To limit a field to certain values, use <code>enum</code>.</p></div>
+          <img src="media/08-schema.jpg" alt="A JSON schema for an order" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Use it</h3><p>Pass the schema as <code>format</code>, and Ollama restricts the reply to match it. Now it was valid JSON in 5 of 5 runs.</p></div>
+          <img src="media/09-valid.jpg" alt="Five of five valid JSON replies using a schema" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Check the truth</h3><p>“Someone wants tea” has no quantity or price, so the model made them up. A schema controls the shape, not the truth.</p></div>
+          <img src="media/10-guess.jpg" alt="Valid JSON with made-up values" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Let it say it doesn’t know</h3><p>Allow <code>null</code> in the schema, and tell the model not to guess. Now it reports what’s missing.</p></div>
+          <img src="media/11-honest.jpg" alt="A reply with null for the missing values" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Why it matters</span>
+        <h2>What this means for agents</h2>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What you learned</th><th scope="col">Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Be specific</td><td>Agents follow your instructions, not your intentions</td></tr>
+            <tr><td>Show examples</td><td>Examples teach the pattern you need</td></tr>
+            <tr><td>Ask for steps</td><td>Agents plan better when they can reason in text</td></tr>
+            <tr><td>Don’t trust prompts for security</td><td>Tools can bring in text with hidden instructions</td></tr>
+            <tr><td>Schemas control shape</td><td>Tool calls are structured output</td></tr>
+            <tr><td>Shape isn’t truth</td><td>Always check what the model gives you</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>build_prompt</code>: combine the parts of a prompt.</li>
+          <li><code>with_examples</code>: build a few-shot prompt.</li>
+          <li><code>final_answer</code>: read the last line of a step-by-step reply.</li>
+          <li><code>parse_json</code>: read JSON from a reply with a code fence.</li>
+          <li><code>label_schema</code>: write a schema with <code>enum</code>.</li>
+        </ol>
+        <p>Then run <code>python3 -m pytest test_exercises.py</code>. You’ve finished when you see <code>5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Changing several things in a prompt at once. Then you can’t tell what helped.</li>
+          <li>Judging a prompt from one run. Run it several times.</li>
+          <li>Asking for only the answer on a problem that needs reasoning.</li>
+          <li>Trusting a value because it’s valid JSON.</li>
+          <li>Relying on a prompt to stop prompt injection.</li>
+        </ul>
+      </div>
+      <div class="fails">
+        <div><h3>Part 1 checkpoint</h3><p>You’ve finished Part 1. Before moving on, build the support ticket classifier in <code>checkpoints/part-1</code>. It uses everything from chapters 06 to 08 and takes about 45 minutes. Run <code>python3 -m pytest test_checkpoint.py</code> until you see <code>5 passed</code>, then try it with the real model.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>Be specific: give the task, context, format and constraints.</li>
+          <li>Examples show the pattern you want.</li>
+          <li>Asking for steps gives the model room to reason.</li>
+          <li>Tags make prompts clearer, but they aren’t security.</li>
+          <li>A schema guarantees the shape of a reply, not its truth.</li>
+        </ul>
+        <p>To learn more, read about <a href="https://arxiv.org/abs/2005.14165">few-shot prompting</a> and <a href="https://arxiv.org/abs/2201.11903">chain-of-thought prompting</a>, or see Anthropic’s <a href="https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview">prompt engineering guide</a>.</p>
+      </div>
+      <div class="next"><span>Next</span><h3>Chapter 09: What an agent is</h3></div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

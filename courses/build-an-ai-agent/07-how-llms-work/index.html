@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How LLMs work | Whitebox Academy</title>
+<meta name="description" content="Open the model itself, using six experiments on your own computer. You don't need any math.">
+<meta property="og:title" content="How LLMs work">
+<meta property="og:description" content="Open the model itself, using six experiments on your own computer. You don't need any math.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/07-how-llms-work/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/07-how-llms-work/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/07-how-llms-work">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 07 of 34 · Part 1: LLM foundations · About 2 hours</p>
+      <h1>How LLMs work</h1>
+      <p class="lede">Open the model itself, using six experiments on your own computer. You don’t need any math.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/07-how-llms-work">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/02-predict.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 5 minutes 0 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>What an LLM is</h2>
+        <p class="lede">In chapter 06, the same question gave different answers, and the model forgot your name. This chapter solves both puzzles. LLM stands for large language model. It’s a program trained on a huge amount of text to do one job: predict what comes next.</p>
+        <p>Inside is a very large set of numbers, called parameters. Your model has about 7.6 billion of them. They were set during training, and they don’t change when you use the model. Everything an LLM seems to do comes from that one job, repeated.</p>
+        <p><a href="/courses/build-an-ai-agent/00-setup/#start-ollama">Start Ollama</a>, activate the <code>.venv</code> from chapter 05, and run <code>python3 experiments.py</code> from <code>chapters/07-how-llms-work/code</code>. It takes about a minute. It uses the <code>chat</code> function from chapter 06, plus two measuring tools provided for you.</p>
+      </div>
+      <pre><span class="cmd">$ python3 experiments.py</span>
+1. Tokens
+  'Hello': characters: 5, tokens: 1
+  'Hello world': characters: 11, tokens: 2
+  'unbelievably': characters: 12, tokens: 3
+  '12345678': characters: 8, tokens: 8
+  'नमस्ते दुनिया': characters: 13, tokens: 13
+2. Next-token prediction
+  ' Paris': 54.5%
+  ' __': 6.9%
+  ' a': 4.6%
+  ' ______': 4.5%
+  ' ____': 4.0%
+3. Temperature
+  0: 1 different: ['Brew Haven', 'Brew Haven', 'Brew Haven', 'Brew Haven', 'Brew Haven', 'Brew Haven']
+  0.7: 5 different: ['Brewed Moments', 'Morning Blend', 'Brewscape', 'Brew Haven', 'Bean Haven', 'Brew Haven']
+  1.5: 5 different: ['Café Bliss', 'MorningBlend', 'Brewtopia', 'Brew Haven', 'Mocha Meadows', 'Brew Haven']
+4. No memory
+  Separate call: You didn't provide your name in the question.
+  With history:  Your name is Asha.
+5. Context window
+  Window of 4096 tokens: '7342'
+  Window of 256 tokens: 'coffeeandteacoffeeandteacoffeeandteacoffeeandteacoffeeandteacoffeeandteacoffeeandteacoffeeand'
+6. Made-up answers
+  The paper "Recursive Tea Embeddings for Quantum Coffee Agents" by Dr. Mira Sundaram explores the application of quantum computing principles to develop a novel embedding technique for agents that could potentially optimize decision-making processes in dynamic environments, using a whimsical theme of "coffee" to engage the reader.</pre>
+      <p class="col">This is real output from <code>qwen2.5:7b</code>. Some of yours will differ.</p>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>Six experiments</h2>
+        <p>Before each one, predict what will happen. A wrong guess is often the most useful result.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Tokens</h3><p>Models read tokens, which are small chunks of text. For English, a rough rule of thumb is 4 characters per token. Other languages often take more. Limits are measured in tokens, and cloud models usually charge by the token.</p></div>
+          <img src="media/03-tokens.jpg" alt="Terminal output comparing characters and tokens for several texts" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Next-token prediction</h3><p>The model gives every possible next token a chance, picks one, adds it to the text and repeats. Here, the blanks probably reflect fill-in-the-blank text it saw in training. Either way, it’s predicting likely text, not looking up a fact.</p></div>
+          <img src="media/04-chances.jpg" alt="The model's top five next tokens, led by Paris at 54.5 percent" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Temperature</h3><p>Temperature controls how the model picks. At 0, it always takes the top choice. Higher values add variety. That solves puzzle 1: the default temperature isn’t 0, so the same question gave different answers. Use a low temperature for reliable tool use. Even at 0, results can differ between machines and model versions.</p></div>
+          <img src="media/05-temperature.jpg" alt="Coffee shop names generated at temperatures of 0, 0.7 and 1.5" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>No memory</h3><p>Each call starts from nothing. That solves puzzle 2: your second call didn’t include your name. When a chatbot seems to remember you, the app is resending the conversation. You’ll write that code yourself in chapter 12.</p></div>
+          <img src="media/06-memory.jpg" alt="A separate call forgets the name, and a call with history remembers it" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Context window</h3><p>The context window is the most tokens a model can handle at once, including its reply. With a small window, the secret code was lost and the reply was nonsense. There was no error message, because Ollama cut the text and carried on.</p></div>
+          <img src="media/07-context.jpg" alt="A large window finds the secret code, and a small window returns nonsense" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Made-up answers</h3><p>We asked for a summary of a paper that doesn’t exist, and the model gave one confidently. This is called hallucination. It did refuse two other made-up questions, so you can’t predict when it will happen. That’s a big reason why agents use tools.</p></div>
+          <img src="media/08-madeup.jpg" alt="The model confidently summarizing a paper that does not exist" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Why it matters</span>
+        <h2>What this means for agents</h2>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What you learned</th><th scope="col">Why it matters</th></tr></thead>
+          <tbody>
+            <tr><td>Models predict text</td><td>Check their output, and don’t trust it blindly</td></tr>
+            <tr><td>Tokens are the unit</td><td>Limits and costs are counted in tokens</td></tr>
+            <tr><td>Temperature adds variety</td><td>Use a low value for reliable tool use</td></tr>
+            <tr><td>Models have no memory</td><td>Your code must keep the conversation</td></tr>
+            <tr><td>Context is limited</td><td>Long runs need managing</td></tr>
+            <tr><td>Models make things up</td><td>Tools and retrieval give them real facts</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>estimate_tokens</code>: use the rule of thumb.</li>
+          <li><code>most_likely</code>: pick the top token.</li>
+          <li><code>apply_temperature</code>: see how temperature changes the chances.</li>
+          <li><code>fits_window</code>: check a context limit.</li>
+          <li><code>add_turn</code>: add to a conversation without changing the original.</li>
+        </ol>
+        <p>Then run <code>python3 -m pytest test_exercises.py</code>. You’ve finished when you see <code>5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Thinking the model looks facts up. It predicts text.</li>
+          <li>Thinking the model remembers earlier calls. Your code has to resend them.</li>
+          <li>Counting words instead of tokens.</li>
+          <li>Expecting an error when the context overflows. You may just get a bad answer.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>An LLM predicts the next token, one at a time.</li>
+          <li>Tokens are the chunks of text a model reads.</li>
+          <li>Temperature controls how much variety you get.</li>
+          <li>Each call starts with no memory.</li>
+          <li>The context window limits what fits, and overflow can be silent.</li>
+          <li>Models can state made-up things confidently.</li>
+        </ul>
+        <p>Today’s LLMs are built on the Transformer, from the 2017 paper <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a>. For a visual explanation, see <a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/08-prompting-structured-output/"><span>Next</span><h3>Chapter 08: Prompting and structured output</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
