@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python basics | Whitebox Academy</title>
+<meta name="description" content="Learn values, decisions, loops and functions, the ideas behind every agent you'll build later.">
+<meta property="og:title" content="Python basics">
+<meta property="og:description" content="Learn values, decisions, loops and functions, the ideas behind every agent you'll build later.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/01-python-basics/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/01-python-basics/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/01-python-basics">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 01 of 34 · Part 0: Setup and Python primer · About 2.5 hours</p>
+      <h1>Python basics</h1>
+      <p class="lede">Learn values, decisions, loops and functions, the ideas behind every agent you’ll build later.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/01-python-basics">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/02-values.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 2 minutes 56 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>From setup to your first program</h2>
+        <p class="lede">In chapter 00, you set up Python and Ollama. Now you’ll learn the Python you need to build an agent.</p>
+        <p>A Python program is a text file of instructions, and Python runs them from top to bottom. Open <code>chapters/01-python-basics/code/basics.py</code> and follow along.</p>
+        <p><strong>Already know Python?</strong> Try the exercises below. If you can finish them quickly, skip to chapter 02.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>The four building blocks</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Values and variables</h3><p>A variable is a name for a value, and <code>=</code> stores it. Each value has a type: <code>str</code> for text, <code>int</code> for whole numbers, <code>float</code> for decimals and <code>bool</code> for true or false. An f-string such as <code>f"Cost: {total}"</code> puts values inside text.</p></div>
+          <img src="media/02-values.jpg" alt="Python code creating three variables, with those lines highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Decisions and loops</h3><p><code>if</code> runs code only when a condition is true, and the four spaces of indentation show which lines belong to it. <code>for</code> repeats for each value, and <code>while</code> repeats while a condition is true. <code>range(1, 4)</code> gives 1, 2 and 3, because it stops before the second number.</p></div>
+          <img src="media/03-decisions.jpg" alt="Python code with an if statement and two loops" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Functions</h3><p>A function is a named block of code you can reuse. Parameters are its inputs, and <code>return</code> sends a result back. An agent’s tools will be ordinary functions just like these.</p></div>
+          <img src="media/04-functions.jpg" alt="Two Python functions, with the order_cost function highlighted" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="col">
+        <h3>Run it</h3>
+        <p>From <code>chapters/01-python-basics/code</code>, run this:</p>
+      </div>
+      <pre><span class="cmd">$ python3 basics.py</span>
+Coffee 120 True
+&lt;class 'str'&gt; &lt;class 'int'&gt; &lt;class 'bool'&gt;
+Three Coffee orders cost 360.
+Big order
+Day 1
+Day 2
+Day 3
+Orders left: 3
+Orders left: 2
+Orders left: 1
+Tea order: 160</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Reading errors</span>
+        <h2>Errors are normal</h2>
+        <p>Python tells you what went wrong. Read the last line first, then the line it points to. These are real error messages:</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What you did</th><th scope="col">What Python says</th><th scope="col">The fix</th></tr></thead>
+          <tbody>
+            <tr><td>Mixed text and a number</td><td><code>TypeError: can only concatenate str (not "int") to str</code></td><td>Use an f-string</td></tr>
+            <tr><td>Forgot to indent</td><td><code>IndentationError: expected an indented block after 'if' statement on line 2</code></td><td>Add four spaces</td></tr>
+            <tr><td>Misspelled a name</td><td><code>NameError: name 'prise' is not defined. Did you mean: 'price'?</code></td><td>Correct the spelling</td></tr>
+            <tr><td>Used <code>print</code> instead of <code>return</code></td><td><code>TypeError: unsupported operand type(s) for +: 'NoneType' and 'int'</code></td><td>Use <code>return</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="col">A function without <code>return</code> gives back <code>None</code>, which means “no value”.</p>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>greet</code>: return a greeting.</li>
+          <li><code>is_even</code>: check if a number is even. Use <code>%</code>, which gives the remainder.</li>
+          <li><code>order_size</code>: choose a size with <code>if</code>.</li>
+          <li><code>sum_to</code>: add numbers with a loop.</li>
+          <li><code>discounted_price</code>: calculate a discount.</li>
+        </ol>
+        <p>Then run <code>python3 exercises.py</code>. You’ve finished when you see <code>5/5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Using <code>=</code> when you mean <code>==</code>. One stores a value, and the other compares.</li>
+          <li>Forgetting the <code>:</code> at the end of <code>if</code>, <code>for</code>, <code>while</code> or <code>def</code>.</li>
+          <li>Using <code>print</code> in a function when you need <code>return</code>.</li>
+          <li>Expecting <code>range(1, 4)</code> to include 4.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>Variables are names for values, and each value has a type.</li>
+          <li><code>if</code> makes decisions, and indentation shows what belongs to it.</li>
+          <li><code>for</code> and <code>while</code> repeat code.</li>
+          <li>Functions take inputs and <code>return</code> a result.</li>
+          <li>Read errors from the last line up.</li>
+        </ul>
+        <p>For more practice, try the official <a href="https://docs.python.org/3/tutorial/">Python tutorial</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/02-collections-files-json/"><span>Next</span><h3>Chapter 02: Collections, files, JSON and errors</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

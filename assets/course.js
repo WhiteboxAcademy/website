@@ -14,6 +14,10 @@ parts.forEach((part, index) => {
   status.textContent = { released: "Released", next: "Up next", coming: "Coming" }[state];
 });
 
+document.querySelectorAll("[data-part] .chapter-links").forEach((links) => {
+  links.hidden = parts.indexOf(links.closest("[data-part]")) >= released;
+});
+
 document.querySelectorAll("[data-progress-label]").forEach((el) => {
   el.textContent = label;
 });

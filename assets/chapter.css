@@ -1,0 +1,58 @@
+/* Chapter pages. Built on site.css. */
+.chapter-hero { padding-block: 64px; }
+.chapter-hero .wrap { display: grid; gap: 20px; }
+.chapter-hero h1 { font-size: clamp(40px, 6vw, 72px); max-width: 16em; }
+.chapter-meta { font: 500 13px/1.5 var(--mono); color: var(--on-ink-muted); }
+
+.chapter-body { max-width: 1040px; padding-block: 48px 96px; display: grid; gap: 64px; }
+.chapter-body > * { min-width: 0; }
+.chapter-body section { display: grid; gap: 24px; }
+.chapter-body h2 { font-size: clamp(30px, 4vw, 44px); }
+.chapter-body h3 { font-size: 21px; }
+.chapter-body img { display: block; width: 100%; height: auto; }
+.chapter-body a:not(.next) { color: var(--ink); text-underline-offset: 3px; text-decoration-color: var(--accent); text-decoration-thickness: 2px; }
+.chapter-body code { font: 500 0.88em var(--mono); font-variant-ligatures: none; overflow-wrap: anywhere; }
+.chapter-body .lede { color: var(--ink); max-width: none; font-size: 20px; }
+
+.col { max-width: 680px; min-width: 0; }
+div.col { display: grid; gap: 16px; }
+.label { display: flex; align-items: center; gap: 10px; font: 500 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+.label::before { content: ""; width: 10px; height: 10px; background: var(--accent); }
+
+.chapter-video { display: grid; gap: 10px; }
+.chapter-video figcaption { color: var(--muted); font-size: 14px; }
+.video-frame { position: relative; aspect-ratio: 1440 / 900; background: var(--ink); overflow: hidden; }
+.video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video-soon { position: absolute; left: 50%; top: 16px; transform: translateX(-50%); white-space: nowrap; padding: 6px 10px; background: var(--accent); color: var(--ink); font: 700 13px/1.2 var(--mono); }
+
+.loop { list-style: decimal; padding-left: 1.4em; display: grid; gap: 8px; }
+.list { list-style: square; padding-left: 1.2em; display: grid; gap: 8px; }
+.list li::marker { color: var(--accent); }
+
+.chapter-body .steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: 40px; padding: 0; border: 0; counter-reset: step; }
+.chapter-body .steps > li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 28px; align-items: start; padding: 0; border: 0; counter-increment: step; }
+.chapter-body .steps .txt { display: grid; gap: 8px; min-width: 0; }
+.chapter-body .steps .txt h3::before { content: counter(step); display: inline-grid; place-items: center; width: 28px; height: 28px; margin-right: 10px; background: var(--accent); color: var(--ink); font: 700 14px/1 var(--mono); letter-spacing: 0; }
+.chapter-body .steps img { border: 1px solid var(--rule); }
+
+.chapter-body pre { margin: 0; padding: 18px 20px; overflow-x: auto; background: var(--ink); color: #eceef1; font: 400 14px/1.6 var(--mono); font-variant-ligatures: none; }
+.chapter-body pre .cmd { color: #ff9a6b; }
+
+.tablebox { overflow-x: auto; }
+.chapter-body table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.chapter-body th, .chapter-body td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+.chapter-body th { font: 500 12px/1.4 var(--mono); text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); border-bottom: 1.5px solid var(--ink); }
+
+.fails { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.fails > div { padding: 20px; background: var(--wash); border-left: 4px solid var(--accent); display: grid; gap: 8px; min-width: 0; }
+
+.next { display: grid; gap: 4px; padding: 24px; background: var(--ink); color: var(--paper); text-decoration: none; }
+.next span { font: 500 12px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--on-ink-muted); }
+a.next:hover { background: #2b2f36; color: var(--paper); }
+a.next h3::after { content: " →"; color: var(--accent); }
+
+@media (max-width: 760px) {
+  .chapter-hero { padding-block: 44px; }
+  .chapter-body { padding-block: 32px 72px; gap: 48px; }
+  .chapter-body .steps > li { grid-template-columns: minmax(0, 1fr); }
+}

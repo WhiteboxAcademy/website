@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decorators, generators and context managers | Whitebox Academy</title>
+<meta name="description" content="Learn three Python features that look unusual at first, and that your framework depends on.">
+<meta property="og:title" content="Decorators, generators and context managers">
+<meta property="og:description" content="Learn three Python features that look unusual at first, and that your framework depends on.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/04-decorators-generators/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/04-decorators-generators/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/04-decorators-generators">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 04 of 34 · Part 0: Setup and Python primer · About 2 hours</p>
+      <h1>Decorators, generators and context managers</h1>
+      <p class="lede">Learn three Python features that look unusual at first, and that your framework depends on.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/04-decorators-generators">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/03-decorator.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 3 minutes 9 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>Three features your framework needs</h2>
+        <p class="lede">In chapter 03, you organized code with classes and type hints. Each feature in this chapter has a real job later in the course.</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">Feature</th><th scope="col">What it does</th><th scope="col">Where you’ll use it</th></tr></thead>
+          <tbody>
+            <tr><td>Decorator</td><td>Adds behavior to a function</td><td>Turning a function into a tool</td></tr>
+            <tr><td>Generator</td><td>Gives back values one at a time</td><td>Streaming a model’s reply</td></tr>
+            <tr><td>Context manager</td><td>Runs setup and cleanup around code</td><td>Tracing and timing each step</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="col">Open <code>chapters/04-decorators-generators/code/power_tools.py</code> and follow along.</p>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>From arguments to cleanup</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Flexible arguments</h3><p><code>*args</code> collects extra positional values, and <code>**kwargs</code> collects named ones. <code>**</code> also unpacks a dictionary into named arguments. That’s how an agent runs a tool: the model sends a dictionary, and your code calls <code>tool(**arguments)</code>.</p></div>
+          <img src="media/02-args.jpg" alt="Python code using *args, **kwargs and dictionary unpacking" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Decorators</h3><p>A decorator takes a function and returns a new one with extra behavior. <code>@log_calls</code> is a shortcut for <code>multiply = log_calls(multiply)</code>. <code>functools.wraps</code> keeps the original’s name and docstring.</p></div>
+          <img src="media/03-decorator.jpg" alt="A log_calls decorator with its wrapper function highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>A tool registry</h3><p>A decorator doesn’t have to wrap anything. This one stores each function in a dictionary and gives it back unchanged, so adding <code>@tool</code> is all it takes. In chapter 14, you’ll build your framework’s tool system this way.</p></div>
+          <img src="media/04-tools.jpg" alt="A tool decorator that stores functions in a TOOLS dictionary" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Generators</h3><p>A generator uses <code>yield</code> to give back one value at a time, and pauses in between. Models send replies piece by piece in the same way. A generator can only be used once.</p></div>
+          <img src="media/05-generator.jpg" alt="A generator function that yields one word at a time" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Context managers</h3><p>A context manager runs setup and cleanup around a <code>with</code> block. Code before <code>yield</code> is the setup, and code after it is the cleanup. <code>finally</code> always runs, even after an error.</p></div>
+          <img src="media/06-context.jpg" alt="A context manager using try and finally around yield" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="col">
+        <h3>Run it</h3>
+        <p>From <code>chapters/04-decorators-generators/code</code>, run this. Notice that <code>End risky work</code> prints before the error is caught.</p>
+      </div>
+      <pre><span class="cmd">$ python3 power_tools.py</span>
+(1, 2) {'name': 'Tea'}
+5
+Calling multiply with (4, 5)
+20
+multiply - Multiply two numbers.
+['greet', 'shout']
+Hello, Asha!
+Models
+reply
+['bit', 'by', 'bit']
+Start loading
+Working
+End loading
+Start risky work
+End risky work
+Caught: Something went wrong</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Reading errors</span>
+        <h2>Some mistakes stay silent</h2>
+        <p>These are real results. Two of them show no error message at all.</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What you did</th><th scope="col">What happens</th><th scope="col">The fix</th></tr></thead>
+          <tbody>
+            <tr><td>Forgot <code>return wrapper</code></td><td><code>TypeError: 'NoneType' object is not callable</code></td><td>Return the wrapper from the decorator</td></tr>
+            <tr><td>Forgot <code>return</code> inside the wrapper</td><td>No error, but every call gives <code>None</code></td><td>Return the function’s result</td></tr>
+            <tr><td>Called <code>next</code> on a finished generator</td><td><code>StopIteration</code></td><td>Use a <code>for</code> loop, or create a new generator</td></tr>
+            <tr><td>Reused a finished generator</td><td>No error, but <code>list</code> gives <code>[]</code></td><td>Create a new generator</td></tr>
+            <tr><td>Passed a key the function doesn’t have</td><td><code>TypeError: add() got an unexpected keyword argument 'c'</code></td><td>Match the keys to the parameters</td></tr>
+            <tr><td>Forgot <code>yield</code> in a context manager</td><td><code>TypeError: 'NoneType' object is not an iterator</code></td><td>Add <code>yield</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>double_result</code>: write a decorator that wraps a function.</li>
+          <li><code>register</code>: write a decorator that stores a function.</li>
+          <li><code>call_tool</code>: call a function with a dictionary of arguments.</li>
+          <li><code>evens</code>: write a generator.</li>
+          <li><code>tracked</code>: write a context manager with guaranteed cleanup.</li>
+        </ol>
+        <p>Then run <code>python3 exercises.py</code>. You’ve finished when you see <code>5/5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Writing <code>@log_calls()</code> with brackets on a decorator that doesn’t take options.</li>
+          <li>Forgetting <code>functools.wraps</code>, which loses the function’s name and docstring.</li>
+          <li>Expecting to loop over a generator twice.</li>
+          <li>Putting cleanup after <code>yield</code> without <code>try</code> and <code>finally</code>. It won’t run after an error.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li><code>*args</code> and <code>**kwargs</code> collect arguments, and <code>**</code> unpacks a dictionary.</li>
+          <li>A decorator takes a function and returns one with extra behavior.</li>
+          <li>A generator uses <code>yield</code> to give back values one at a time.</li>
+          <li>A context manager guarantees setup and cleanup.</li>
+        </ul>
+        <p>To learn more, see the official guide to <a href="https://docs.python.org/3/library/contextlib.html">contextlib</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/05-projects-testing-http/"><span>Next</span><h3>Chapter 05: Virtual environments, packages, pytest and HTTP</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

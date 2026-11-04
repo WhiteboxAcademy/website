@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Classes, dataclasses and type hints | Whitebox Academy</title>
+<meta name="description" content="Give your data structure and behavior, using the same shapes your agent framework will be built from.">
+<meta property="og:title" content="Classes, dataclasses and type hints">
+<meta property="og:description" content="Give your data structure and behavior, using the same shapes your agent framework will be built from.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/03-classes-type-hints/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/03-classes-type-hints/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/03-classes-type-hints">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 03 of 34 · Part 0: Setup and Python primer · About 2 hours</p>
+      <h1>Classes, dataclasses and type hints</h1>
+      <p class="lede">Give your data structure and behavior, using the same shapes your agent framework will be built from.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/03-classes-type-hints">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/02-class.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 2 minutes 43 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>Dictionaries only go so far</h2>
+        <p class="lede">In chapter 02, you stored data in lists and dictionaries. A dictionary can’t stop you misspelling a key, and it can’t carry its own behavior. Classes solve both.</p>
+        <p>You’ll use these ideas throughout the framework. <code>Message</code> and <code>Conversation</code> hold an agent’s history, type hints describe its tools, and a shared base class lets you swap one model for another. Open <code>chapters/03-classes-type-hints/code/models.py</code> and follow along.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>From a blueprint to a shared shape</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Classes</h3><p>A class is a blueprint that groups data with the functions that use it. <code>__init__</code> sets up each new object, and <code>self</code> means “this object”. A value stored on the object is an attribute, and a function in the class is a method.</p></div>
+          <img src="media/02-class.jpg" alt="An Order class with its __init__ method highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Dataclasses</h3><p>A dataclass writes <code>__init__</code> for you, and gives you readable printing and <code>==</code> comparison. A list field needs <code>field(default_factory=list)</code>, so each object gets its own list.</p></div>
+          <img src="media/03-dataclass.jpg" alt="A Conversation dataclass with its messages field highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Inheritance</h3><p>A base class defines a shape, and each subclass fills in the details. Code that uses a <code>Tool</code> doesn’t care which one it gets. In chapter 13, this same idea makes your model replaceable.</p></div>
+          <img src="media/04-inheritance.jpg" alt="A Tool base class with an UpperTool subclass" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="col">
+        <h3>Type hints</h3>
+        <p>Type hints describe what a function takes and returns.</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">Hint</th><th scope="col">Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>text: str</code></td><td><code>text</code> should be a string</td></tr>
+            <tr><td><code>limit: int = 10</code></td><td><code>limit</code> should be a whole number, and defaults to 10</td></tr>
+            <tr><td><code>-&gt; str</code></td><td>The function returns a string</td></tr>
+            <tr><td><code>-&gt; None</code></td><td>The function returns nothing</td></tr>
+            <tr><td><code>Message | None</code></td><td>Either a <code>Message</code> or <code>None</code></td></tr>
+            <tr><td><code>list[Message]</code></td><td>A list of <code>Message</code> objects</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="col"><strong>Python doesn’t enforce type hints.</strong> They help people and tools read your code. Your program can also read them as data, and in chapter 14 you’ll use that to describe tools to a model automatically.</p>
+      <div class="col">
+        <h3>Run it</h3>
+        <p>From <code>chapters/03-classes-type-hints/code</code>, run this:</p>
+      </div>
+      <pre><span class="cmd">$ python3 models.py</span>
+Coffee 240
+Message(role='user', content='Hello')
+True
+None
+2 Hello!
+Whitebox A
+{'text': &lt;class 'str'&gt;, 'limit': &lt;class 'int'&gt;, 'return': &lt;class 'str'&gt;}
+upper AGENT
+reverse tnega</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Reading errors</span>
+        <h2>Four errors you’ll meet</h2>
+        <p>These are real error messages:</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What you did</th><th scope="col">What Python says</th><th scope="col">The fix</th></tr></thead>
+          <tbody>
+            <tr><td>Forgot <code>self</code> in a method</td><td><code>TypeError: Order.total() takes 0 positional arguments but 1 was given</code></td><td>Add <code>self</code> as the first parameter</td></tr>
+            <tr><td>Left out a value</td><td><code>TypeError: Order.__init__() missing 1 required positional argument: 'price'</code></td><td>Pass the value in</td></tr>
+            <tr><td>Wrote <code>price = price</code></td><td><code>AttributeError: 'Order' object has no attribute 'price'</code></td><td>Use <code>self.price = price</code></td></tr>
+            <tr><td>Used <code>[]</code> as a dataclass default</td><td><code>ValueError: mutable default &lt;class 'list'&gt; for field messages is not allowed: use default_factory</code></td><td>Use <code>field(default_factory=list)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the TODOs:</p>
+        <ol class="loop">
+          <li><code>Item</code>: write a class with <code>__init__</code> and a method.</li>
+          <li><code>ToolCall</code>: write a dataclass with a default.</li>
+          <li><code>Chat</code>: complete two methods.</li>
+          <li><code>AddTool</code>: write a subclass.</li>
+          <li><code>area</code>: add type hints.</li>
+        </ol>
+        <p>Then run <code>python3 exercises.py</code>. You’ve finished when you see <code>5/5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Forgetting <code>self</code> in a method, or forgetting <code>self.</code> when you store a value.</li>
+          <li>Writing <code>Order</code> when you mean <code>Order()</code>. The brackets create the object.</li>
+          <li>Using <code>[]</code> as a default instead of <code>field(default_factory=list)</code>.</li>
+          <li>Expecting type hints to stop wrong values. They don’t.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>A class groups data with the functions that use it.</li>
+          <li>A dataclass writes the setup code for you.</li>
+          <li>Type hints describe your code, and your program can read them.</li>
+          <li>Inheritance lets different classes share one shape.</li>
+        </ul>
+        <p>To learn more, see the official guide to <a href="https://docs.python.org/3/tutorial/classes.html">classes</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/04-decorators-generators/"><span>Next</span><h3>Chapter 04: Decorators, generators and context managers</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

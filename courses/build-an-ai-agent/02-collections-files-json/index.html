@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collections, files, JSON and errors | Whitebox Academy</title>
+<meta name="description" content="Hold groups of data, save them to files, and handle problems without crashing.">
+<meta property="og:title" content="Collections, files, JSON and errors">
+<meta property="og:description" content="Hold groups of data, save them to files, and handle problems without crashing.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/02-collections-files-json/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/02-collections-files-json/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/02-collections-files-json">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 02 of 34 · Part 0: Setup and Python primer · About 2 hours</p>
+      <h1>Collections, files, JSON and errors</h1>
+      <p class="lede">Hold groups of data, save them to files, and handle problems without crashing.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/02-collections-files-json">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/02-dicts.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 2 minutes 47 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>Real programs work with groups of data</h2>
+        <p class="lede">In chapter 01, you learned values, decisions, loops and functions. Now you’ll hold groups of data, then save and load them.</p>
+        <p>This matters for agents too. An agent’s whole conversation is a list of dictionaries, and models ask for tools using JSON. Open <code>chapters/02-collections-files-json/code/data_basics.py</code> and follow along.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>From values to saved data</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Lists and dictionaries</h3><p>A list holds values in order, and positions start at 0. A dictionary stores values under keys. <code>order["product"]</code> needs the key to exist, while <code>order.get("discount", 0)</code> gives back a default if it’s missing. A list of dictionaries is exactly how you’ll store an agent’s conversation.</p></div>
+          <img src="media/02-dicts.jpg" alt="Python code with a list, a dictionary and a list of messages, with the dictionary highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Files and JSON</h3><p><code>Path</code> reads and writes files, and <code>write_text</code> replaces what’s in the file. JSON is a text format for data: <code>json.loads</code> turns text into Python data, and <code>json.dumps</code> turns Python data into text.</p></div>
+          <img src="media/03-files.jpg" alt="Python code that writes a file and reads JSON, with the file lines highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Handling errors</h3><p>Some errors are expected, like a missing file. <code>try</code> runs the risky code, and <code>except</code> handles one kind of error. Agents use this same pattern: a tool’s error goes back as text, so the model can try something else. Only catch errors you expect, because a plain <code>except:</code> hides real bugs.</p></div>
+          <img src="media/04-errors.jpg" alt="A Python function using try and except, with those lines highlighted" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="col">
+        <h3>Run it</h3>
+        <p>From <code>chapters/02-collections-files-json/code</code>, run this:</p>
+      </div>
+      <pre><span class="cmd">$ python3 data_basics.py</span>
+Coffee 3
+Coffee 0
+user: Hello
+assistant: Hi! How can I help?
+[240, 160, 190] 295
+Order more coffee
+480
+{"name": "add", "arguments": {"a": 2, "b": 3}}
+Error: missing.json doesn't exist</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Reading errors</span>
+        <h2>Four errors you’ll meet</h2>
+        <p>These are real error messages:</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What happened</th><th scope="col">What Python says</th></tr></thead>
+          <tbody>
+            <tr><td>The key isn’t in the dictionary</td><td><code>KeyError: 'price'</code></td></tr>
+            <tr><td>The position is past the end of the list</td><td><code>IndexError: list index out of range</code></td></tr>
+            <tr><td>The JSON isn’t valid</td><td><code>JSONDecodeError: Expecting property name enclosed in double quotes: line 1 column 2 (char 1)</code></td></tr>
+            <tr><td>The file doesn’t exist</td><td><code>FileNotFoundError: [Errno 2] No such file or directory: 'missing.txt'</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>total_quantity</code>: add up values from a list of dictionaries.</li>
+          <li><code>get_price</code>: look up a value safely.</li>
+          <li><code>in_stock</code>: filter a list with a list comprehension, such as <code>[p for p in prices if p &gt; 90]</code>.</li>
+          <li><code>save_and_load</code>: write JSON to a file and read it back.</li>
+          <li><code>tool_name</code>: read JSON safely, and handle invalid JSON with <code>json.JSONDecodeError</code>.</li>
+        </ol>
+        <p>Then run <code>python3 exercises.py</code>. You’ve finished when you see <code>5/5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Starting from 1 instead of 0. The last item in a list of 3 is at position 2.</li>
+          <li>Using <code>[]</code> for a key that might be missing. Use <code>.get()</code> instead.</li>
+          <li>Mixing up <code>loads</code> and <code>dumps</code>. Text goes in to <code>loads</code>, and text comes out of <code>dumps</code>.</li>
+          <li>Writing JSON with single quotes.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>Lists hold values in order, and dictionaries store values under keys.</li>
+          <li>A list of dictionaries is how an agent stores its conversation.</li>
+          <li><code>Path</code> reads and writes files.</li>
+          <li>JSON turns data into text and back.</li>
+          <li><code>try</code> and <code>except</code> handle errors you expect.</li>
+        </ul>
+        <p>To learn more, see the official guide to <a href="https://docs.python.org/3/tutorial/datastructures.html">Python data structures</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/03-classes-type-hints/"><span>Next</span><h3>Chapter 03: Classes, dataclasses and type hints</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

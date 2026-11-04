@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Virtual environments, packages, pytest and HTTP | Whitebox Academy</title>
+<meta name="description" content="Set up a real project, test it with one command, and talk to a web service.">
+<meta property="og:title" content="Virtual environments, packages, pytest and HTTP">
+<meta property="og:description" content="Set up a real project, test it with one command, and talk to a web service.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/05-projects-testing-http/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/05-projects-testing-http/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/05-projects-testing-http">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 05 of 34 · Part 0: Setup and Python primer · About 1.5 hours</p>
+      <h1>Virtual environments, packages, pytest and HTTP</h1>
+      <p class="lede">Set up a real project, test it with one command, and talk to a web service.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/05-projects-testing-http">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><img src="media/05-http.jpg" alt="" width="1440" height="900"><span class="video-soon">Video coming soon</span></div><figcaption>Chapter video, 2 minutes 53 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>From single files to real projects</h2>
+        <p class="lede">So far, each program has been a single file using only what comes with Python. Real projects use other people’s code, have automated tests, and talk to other services. Your agent will do all three.</p>
+        <p><a href="/courses/build-an-ai-agent/00-setup/#start-ollama">Start Ollama</a> before you begin.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walkthrough</span>
+        <h2>Set up, test, connect</h2>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Create an environment</h3><p>A package is code someone else wrote. A virtual environment is a private folder of packages for one project. Create it once with <code>python3 -m venv .venv</code>, then activate it each time you open a terminal. pip installs what’s listed in <code>requirements.txt</code>.</p></div>
+          <img src="media/02-install.jpg" alt="Terminal showing a virtual environment being created and packages installed" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Write a test</h3><p>A test is code that checks your code. pytest runs every function starting with <code>test_</code>. <code>assert</code> checks that something is true, and <code>pytest.raises</code> checks that an error really happens.</p></div>
+          <img src="media/03-test.jpg" alt="A pytest file with an assert highlighted" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Read a failure</h3><p>When a test fails, pytest shows what it got. Here it got 122 when it expected 240, because the function added the numbers when it should have multiplied them.</p></div>
+          <img src="media/04-fail.jpg" alt="pytest output showing that 122 does not equal 240" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Talk over HTTP</h3><p>HTTP is how programs talk over a network. <code>GET</code> asks for data, and <code>POST</code> sends it. Ollama runs a small web server on your computer, and every model call in this course uses HTTP. Always set a <code>timeout</code>.</p></div>
+          <img src="media/05-http.jpg" alt="Python code calling the Ollama server with the requests package" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">Status code</th><th scope="col">Meaning</th></tr></thead>
+          <tbody>
+            <tr><td>200</td><td>It worked</td></tr>
+            <tr><td>404</td><td>It wasn’t found</td></tr>
+            <tr><td>429</td><td>Too many requests</td></tr>
+            <tr><td>500</td><td>The server had a problem</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="col">
+        <h3>Run it</h3>
+        <p>From <code>chapters/05-projects-testing-http/code</code>, run this. The last line is a real failure, and no Python error was raised. A 404 is still a response, so always check the status code.</p>
+      </div>
+      <pre><span class="cmd">$ python3 main.py</span>
+240
+200 {'version': '0.34.4'}
+200 7.6B
+404 {'error': "model 'no-such-model:latest' not found"}</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Reading errors</span>
+        <h2>Five errors you’ll meet</h2>
+        <p>These are real error messages:</p>
+      </div>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What happened</th><th scope="col">What Python says</th><th scope="col">The fix</th></tr></thead>
+          <tbody>
+            <tr><td>The environment isn’t active</td><td><code>ModuleNotFoundError: No module named 'requests'</code></td><td>Activate <code>.venv</code>, then install</td></tr>
+            <tr><td>pytest isn’t installed</td><td><code>No module named pytest</code></td><td>Activate <code>.venv</code>, then install</td></tr>
+            <tr><td>You’re in the wrong folder</td><td><code>ModuleNotFoundError: No module named 'shop'</code></td><td>Run it from the <code>code</code> folder</td></tr>
+            <tr><td>The server isn’t running</td><td><code>requests.exceptions.ConnectionError: HTTPConnectionPool(...)</code></td><td><a href="/courses/build-an-ai-agent/00-setup/#start-ollama">Start Ollama</a></td></tr>
+            <tr><td>The reply isn’t JSON</td><td><code>requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)</code></td><td>Check the status code and URL</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>From now on, you’ll check your work with pytest. Open <code>exercises.py</code> and complete TODOs 1 to 4, then complete TODO 5 in <code>test_mine.py</code>:</p>
+        <ol class="loop">
+          <li><code>read_response</code>: handle a status code.</li>
+          <li><code>fetch_version</code>: make a GET request.</li>
+          <li><code>send_json</code>: make a POST request.</li>
+          <li><code>checked_quantity</code>: raise an error.</li>
+          <li><code>test_upper</code>: write your own test.</li>
+        </ol>
+        <p>Your functions receive <code>get</code> and <code>post</code> as parameters, so the tests can use fake versions and run without a network. You’ll use the same trick with a fake model in chapter 13.</p>
+      </div>
+      <pre><span class="cmd">$ python3 -m pytest test_exercises.py test_mine.py</span></pre>
+      <p class="col">You’ve finished when you see <code>5 passed</code>.</p>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Forgetting to activate <code>.venv</code> in a new terminal.</li>
+          <li>Sharing or committing <code>.venv</code>. Share <code>requirements.txt</code> instead.</li>
+          <li>Leaving out <code>timeout</code>.</li>
+          <li>Assuming a response means success. Check the status code.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="fails">
+        <div><h3>Part 0 checkpoint</h3><p>You’ve finished the Python primer. Before moving on, complete the small order tracker in <code>checkpoints/part-0</code>. It uses everything from chapters 01 to 05 and takes about 45 minutes. Run <code>python3 -m pytest test_checkpoint.py</code> until you see <code>5 passed</code>.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>A virtual environment keeps each project’s packages separate.</li>
+          <li><code>requirements.txt</code> lists what a project needs.</li>
+          <li>pytest runs your tests with one command.</li>
+          <li>HTTP requests have a URL and a method, and responses have a status code.</li>
+        </ul>
+        <p>To learn more, see the <a href="https://docs.pytest.org/">pytest documentation</a> and the <a href="https://requests.readthedocs.io/">Requests documentation</a>.</p>
+      </div>
+      <div class="next"><span>Next</span><h3>Chapter 06: Your first model call</h3></div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
