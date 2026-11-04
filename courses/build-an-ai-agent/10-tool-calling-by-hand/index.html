@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tool calling by hand | Whitebox Academy</title>
+<meta name="description" content="Replace yourself with code: the model asks for a tool in JSON, and a Python dict runs it.">
+<meta property="og:title" content="Tool calling by hand">
+<meta property="og:description" content="Replace yourself with code: the model asks for a tool in JSON, and a Python dict runs it.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/10-tool-calling-by-hand/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/10-tool-calling-by-hand/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/10-tool-calling-by-hand">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 10 of 34 · Part 2: The first agent · About 1.5 hours</p>
+      <h1>Tool calling by hand</h1>
+      <p class="lede">Replace yourself with code: the model asks for a tool in JSON, and a Python dict runs it.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/10-tool-calling-by-hand">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/qgcKlwVQQ9A" title="Tool calling by hand" loading="lazy" allowfullscreen></iframe></div><figcaption>Chapter video, 4 minutes 38 seconds, no sound. It starts with a 30-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+      <div class="col">
+        <span class="label">Where we are</span>
+        <h2>Replace the human</h2>
+        <p class="lede">In chapter 09, the model asked and you fetched the files. An agent can’t wait for you to type, so this chapter replaces you with code.</p>
+        <p>Chapter 09’s question needs several files, so start with one step of it. <a href="/courses/build-an-ai-agent/00-setup/#start-ollama">Start Ollama</a>, activate the <code>.venv</code> from chapter 05, and run this from <code>chapters/10-tool-calling-by-hand/code</code>. <code>by_hand.py</code> is provided, and you haven’t seen it yet. Run it first, then we’ll open it piece by piece.</p>
+      </div>
+      <pre><span class="cmd">$ python3 by_hand.py "What was the coffee revenue on Monday?"</span>
+Model asked for: {"tool": "read_file", "arguments": {"path": "sales/monday.txt"}}
+Tool returned: 'Coffee: 120\nTea: 80\n'
+Final answer: The coffee revenue on Monday was 120.</pre>
+      <div class="col">
+        <p>This is real output from <code>qwen2.5:7b</code>. Three things happened, and the model only did two of them:</p>
+        <ol class="loop">
+          <li><strong>The model wrote a request.</strong> It didn’t answer. It replied with JSON naming a tool.</li>
+          <li><strong>Your code ran the tool.</strong> It read the real file.</li>
+          <li><strong>The model answered,</strong> using the result your code sent back.</li>
+        </ol>
+        <p>This is <strong>tool calling</strong>. The model still only produces text. The difference is that now some of that text is a request your code can read.</p>
+        <p><strong>Predict:</strong> which file will the model ask for this time?</p>
+      </div>
+      <pre><span class="cmd">$ python3 by_hand.py "What was the tea revenue on Tuesday?"</span>
+Model asked for: {"tool": "read_file", "arguments": {"path": "sales/tuesday.txt"}}
+Tool returned: 'Coffee: 150\nTea: 95\n'
+Final answer: The tea revenue on Tuesday was 95.</pre>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Walk through the code</span>
+        <h2>Open by_hand.py</h2>
+        <p>The <code>chat</code> function is the one from chapter 08. The rest takes five steps.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>Tools are ordinary functions</h3><p>A tool is a function you let the model ask for. <code>TOOLS</code> is a dict from a name to a function. The model can only write text, so it writes the name, and the dict turns that name into something you can call.</p></div>
+          <img src="media/03-tools.jpg" alt="The tool functions and the TOOLS dict" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Tell the model what exists</h3><p>The model can’t see your Python. It only knows about the tools you describe in the system message.</p></div>
+          <img src="media/04-system.jpg" alt="A system message listing the three tools" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Get a request your code can read</h3><p><strong>Predict:</strong> with only that system message, how many of five replies will be valid JSON? None were. The model wrote a sentence around its request. So pass a schema as <code>format</code>, as in chapter 08, and it was valid in 5 of 5 runs. <code>enum</code> limits <code>tool</code> to names that exist.</p></div>
+          <img src="media/06-schema.jpg" alt="Results showing 0 of 5 valid JSON without a schema, and 5 of 5 with one" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>Run the tool</h3><p>Choosing a function from a name is called dispatch. <code>TOOLS[name]</code> finds the function, and <code>**arguments</code> unpacks the dict into named arguments. The result is always a string, because text is all you can send to a model.</p></div>
+          <img src="media/07-dispatch.jpg" alt="The dispatch function" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>The round trip</h3><p><code>ask</code> calls the model twice. The first call uses the schema and gets a request. The second gets the answer. A model remembers nothing between calls, so you add the request and the result to the conversation, and send all of it again.</p></div>
+          <img src="media/08-ask.jpg" alt="The ask function with its two model calls" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">When it goes wrong</span>
+        <h2>Three tests</h2>
+        <p>Before each one, predict what will happen.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <div class="txt"><h3>A tool fails</h3><p>There’s no file for Sunday. Will it crash, or will the model make up a number? Neither. <code>dispatch</code> caught the exception and sent the error back as text. The model didn’t invent a number in 5 of 5 runs. Treat a tool error as information for the model, not as the end of the program.</p></div>
+          <img src="media/09-error.jpg" alt="A missing file returned to the model as an error, and an honest answer" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>No tool is needed</h3><p>A joke needs no tool, but the model asked for one anyway, in 5 of 5 runs, because the schema requires one. This version can’t choose to skip tools.</p></div>
+          <img src="media/10-joke.jpg" alt="The model reading a sales file before telling a joke" loading="lazy" width="1440" height="900">
+        </li>
+        <li>
+          <div class="txt"><h3>No tool fits</h3><p>None of our tools can tell you the weather. With the <code>enum</code> removed, the model invented a tool called <code>weather</code> in 5 of 5 runs. A schema controls the shape, not the truth. The model’s request is input to your program, so <code>dispatch</code> checks the name.</p></div>
+          <img src="media/11-enum.jpg" alt="Five replies asking for a weather tool that doesn't exist" loading="lazy" width="1440" height="900">
+        </li>
+      </ol>
+      <div class="tablebox">
+        <table>
+          <thead><tr><th scope="col">What happened</th><th scope="col">What you see</th><th scope="col">The fix</th></tr></thead>
+          <tbody>
+            <tr><td>The reply isn’t JSON</td><td><code>JSONDecodeError: Expecting value: line 1 column 1 (char 0)</code></td><td>Pass the schema as <code>format</code></td></tr>
+            <tr><td>A tool fails with no <code>try</code> around it</td><td><code>FileNotFoundError: [Errno 2] No such file or directory</code></td><td>Catch it in <code>dispatch</code></td></tr>
+            <tr><td>The model uses the wrong argument name</td><td><code>Error: read_file() got an unexpected keyword argument 'file'</code></td><td>Show the argument names in the system message</td></tr>
+            <tr><td>The model names a tool you don’t have</td><td><code>Error: there is no tool called weather</code></td><td>Check the name before you look it up</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Your turn</span>
+        <h2>Exercises</h2>
+        <p>Open <code>exercises.py</code> and complete the five TODOs:</p>
+        <ol class="loop">
+          <li><code>request_schema</code>: write the schema for a tool request.</li>
+          <li><code>read_request</code>: read the tool name and arguments from a reply.</li>
+          <li><code>run_tool</code>: look up a function in a dict and call it.</li>
+          <li><code>safe_run_tool</code>: return errors as text instead of crashing.</li>
+          <li><code>round_trip</code>: do one full round trip.</li>
+        </ol>
+        <p>Then run <code>python3 -m pytest test_exercises.py</code>. These checks use a fake model, so Ollama doesn’t need to be running. You’ve finished when you see <code>5 passed</code>.</p>
+      </div>
+      <div class="col">
+        <h3>Common mistakes</h3>
+        <ul class="list">
+          <li>Forgetting to send the result back. The model can’t see what your code did.</li>
+          <li>Sending only the result in the second call. In testing, the model never answered the question this way, in 5 of 5 runs.</li>
+          <li>Passing the schema on the second call too. In testing, it wrote another tool request instead of an answer, in 5 of 5 runs.</li>
+          <li>Returning a number from a tool without <code>str</code>. Messages hold text.</li>
+          <li>Letting a tool error crash the program, when the model could have used it.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="col">
+        <span class="label">Recap</span>
+        <h2>What you opened</h2>
+        <ul class="list">
+          <li>A model can’t run anything. It writes a request, and your code runs it.</li>
+          <li>A tool is an ordinary function, and a dict turns its name into a call.</li>
+          <li>A schema makes the request something your code can read.</li>
+          <li>Results and errors both go back to the model as text.</li>
+          <li>The model’s request is input, so check it.</li>
+        </ul>
+        <p>To learn more, read the <a href="https://arxiv.org/abs/2302.04761">Toolformer paper</a> or Ollama’s post on <a href="https://ollama.com/blog/structured-outputs">structured outputs</a>.</p>
+      </div>
+      <a class="next" href="/courses/build-an-ai-agent/11-native-tool-calling/"><span>Next</span><h3>Chapter 11: Native tool calling</h3></a>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
