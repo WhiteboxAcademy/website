@@ -26,3 +26,19 @@ menuButton.addEventListener("click", () => setMenu(!nav.classList.contains("open
 nav.addEventListener("click", (event) => {
   if (event.target.closest("a")) setMenu(false);
 });
+
+// On a chapter page of the agent course, remember in this browser that it was opened, so the course page can show
+// "Pick up at". Only the chapter numbers are kept, and nothing is sent anywhere.
+(() => {
+  const match = location.pathname.match(/^\/courses\/build-an-ai-agent\/(\d\d)-[^/]+\/?$/);
+  if (!match) return;
+  try {
+    const key = "whitebox-agent-progress";
+    const saved = JSON.parse(localStorage.getItem(key) || "{}");
+    const opened = new Set(Array.isArray(saved.opened) ? saved.opened : []);
+    opened.add(Number(match[1]));
+    localStorage.setItem(key, JSON.stringify({ opened: [...opened].sort((a, b) => a - b) }));
+  } catch {
+    // Storage blocked or full: the course page just shows "Not started".
+  }
+})();
