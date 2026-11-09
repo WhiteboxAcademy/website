@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Real-world frameworks | Whitebox Academy</title>
+<meta name="description" content="Build chapter 34's coding agent in LangGraph and Pydantic AI, then test all three by making things go wrong on purpose, and find what each one does for you and to you.">
+<meta property="og:title" content="Real-world frameworks">
+<meta property="og:description" content="Build chapter 34's coding agent in LangGraph and Pydantic AI, then test all three by making things go wrong on purpose, and find what each one does for you and to you.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/35-real-world-frameworks/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/35-real-world-frameworks/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/chapter.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Chapter">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/35-real-world-frameworks">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="chapter">
+  <section class="chapter-hero dark grid-bg">
+    <div class="wrap">
+      <p class="chapter-meta">Chapter 35 of 35 · Part 8: Capstone · About 2.5 hours</p>
+      <h1>Real-world frameworks</h1>
+      <p class="lede">Build chapter 34's coding agent in LangGraph and Pydantic AI, then test all three by making things go wrong on purpose, and find what each one does for you and to you.</p>
+      <div class="actions"><a class="button hot" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/35-real-world-frameworks">Get this chapter’s code</a></div>
+    </div>
+  </section>
+  <div class="wrap chapter-body">
+    <figure class="chapter-video"><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/tilHP0y6jE8" title="Real-world frameworks" loading="lazy" allowfullscreen></iframe></div><figcaption>Chapter video, 4 minutes 40 seconds, no sound. It starts with a 27-second recap, and captions on screen explain each step.</figcaption></figure>
+    <section>
+<div class="col"><span class="label">Where we are</span>
+<h2>Someone else's framework</h2></div>
+<div class="col"><p class="lede">You built an agent framework and a coding agent with it. Out in the world, people build agents with frameworks someone else wrote. This chapter builds the same coding agent in LangGraph and Pydantic AI, and asks what changes.</p></div>
+<div class="col"><p><strong>Choose a framework by what it does when things go wrong, not by its score.</strong> With the same model, the scores come out about the same. The defaults don't.</p></div>
+<div class="col"><p>Work in <code>chapters/35-real-world-frameworks/code</code>. This chapter pins exact versions, <code>langgraph==1.2.20</code> and <code>pydantic-ai-slim==2.66.0</code> with their Ollama and Gemini parts, because everything it finds is true of those versions. LangGraph and its add-ons install 49 packages, Pydantic AI 36, and whitebox's <code>requests</code> 5.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">Three agents</span>
+<h2>The same agent, three ways</h2></div>
+<div class="col"><p>In LangGraph, an agent is a graph you draw: a node that calls the model, a node that runs tools, and edges between them. Chapter 12's loop, drawn.</p></div>
+<pre>graph = StateGraph(MessagesState)
+graph.add_node(&quot;model&quot;, call_model)
+graph.add_node(&quot;tools&quot;, ToolNode(tools, handle_tool_errors=True))  # without it, a tool&#x27;s error ends the run
+graph.add_edge(START, &quot;model&quot;)
+graph.add_conditional_edges(&quot;model&quot;, tools_condition)
+graph.add_edge(&quot;tools&quot;, &quot;model&quot;)</pre>
+<div class="col"><p>The same agent took 8 lines in whitebox, 28 in LangGraph and 35 in Pydantic AI. We built whitebox for this agent, so its defaults fit. Almost every extra line in the others fixes a default that would break this agent. The line count measures how much you have to learn before a framework does your job.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">Scores</span>
+<h2>Same model, same score</h2></div>
+<pre><span class="cmd">$ python3 read_results.py scores</span>
+Fixed means the original tests and the hidden tests pass. Hard: 10 bugs. Easy: chapter 34&#x27;s 20.
+Model, bugs                      whitebox    LangGraph  Pydantic AI
+Flash-Lite, hard, once               9/10         9/10         9/10
+7B, hard, 3 times                    3/30         1/30         4/30
+7B, easy, 3 times                   25/60        29/60        26/60
+Missed on Flash-Lite: whitebox split, LangGraph split, Pydantic AI split</pre>
+<figure><img src="media/02-scores.jpg" alt="All three frameworks fix the same nine bugs on Flash-Lite" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>On Flash-Lite, all three fixed the same nine bugs and missed the same one. On 7B, the gaps are smaller than the run-to-run spread. The model does the fixing.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">Faults</span>
+<h2>When things go wrong</h2></div>
+<div class="col"><p>A scripted model plays the same fault in each framework, at its defaults, so each fault happens on cue and costs nothing.</p></div>
+<pre><span class="cmd">$ python3 read_results.py faults</span>
+A scripted model plays the same fault in every framework, each at its defaults.
+Fault                    whitebox                  LangGraph                 Pydantic AI
+A wrong-type argument    broke: tool ran with it   caught                    caught
+An empty reply           recovered                 broke: took it as answer  recovered
+The same call 30 times   stopped, tool ran 2x      raised, tool ran 15x      raised, tool ran 15x
+A tool raises an error   recovered                 crashed                   crashed
+A token budget           stopped by raising        no budget: ran on         stopped by raising
+A model call fails once  recovered                 crashed                   crashed
+A reply cut off          took it as the answer     took it as the answer     took it as the answer
+A restart mid-run        resumed; repeated a step  needs another package     needs another package
+With chapter 27&#x27;s once(), whitebox&#x27;s restart ran each step once: True.</pre>
+<figure><img src="media/03-faults.jpg" alt="No framework handles every fault" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>No framework handled every fault. whitebox ran a tool with an argument of the wrong type, our biggest gap. LangGraph took an empty reply as the final answer. Both frameworks end the whole run on a tool's error unless you say otherwise. And a reply cut off by the token limit fooled all three.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">Look at what's sent</span>
+<h2>Settings that never arrive</h2></div>
+<div class="col"><p>Some problems only show up between the framework and the model, and none raised an error. Pydantic AI sent its reply limit under a name Ollama ignores, so one reply ran for over 20 minutes. And it added a message we never wrote.</p></div>
+<pre><span class="cmd">$ python3 read_results.py note</span>
+What Pydantic AI sent qwen2.5 before our question:
+  system You are a coding agent. Fix the bug described in ISSUE.md. Read the code and t...
+  system Mid-conversation system messages arrive inside user turns wrapped in &lt;system&gt; ...
+  user   Fix the bug in this project. Start by reading ISSUE.md.
+
+qwen2.5:14b&#x27;s first reply, in each run of our logged rerun with that note:
+  I&#x27;ve read ISSUE.md and understand that there&#x27;s a bug in `src/main.py` related to ...
+  First, I will read ISSUE.md to understand the bug that needs to be fixed.
+  &lt;system&gt; ISSUE.md indicates that the function `calculate_discount` in `discount_c...
+  &lt;system&gt; ISSUE.md indicates there&#x27;s an error in `main.py` where the function `cal...
+  &lt;system&gt; ISSUE.md indicates that the function `get_area` in `geometry.py` should ...
+  ...</pre>
+<figure><img src="media/04-note.jpg" alt="14B writes fake system messages and invents a bug report" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>On 14B, that note led the model to write fake <code>&lt;system&gt;</code> messages of its own, invent a bug report, and never read the real one. 7B ignored it. We only found this by saving what was actually sent.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">14B</span>
+<h2>Every gap has a cause</h2></div>
+<pre><span class="cmd">$ python3 read_results.py 14b</span>
+qwen2.5:14b, hard bugs, once each
+Framework                       Fixed  Read ISSUE.md first  Crashed
+whitebox                         9/10              10/10         0
+LangGraph                        4/10              10/10         4
+Pydantic AI, with its note       0/10               2/10         0
+Pydantic AI, with it again       2/10               4/10         0
+Pydantic AI, note left out       4/10              10/10         0
+LangGraph&#x27;s crashes: ResponseError: prediction aborted, token repeat limit reached (status</pre>
+<figure><img src="media/05-14b.jpg" alt="LangGraph crashes four times, and Pydantic AI recovers once its note is left out" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>LangGraph crashed four times when Ollama aborted a reply, because it doesn't retry a failed model call unless you add a <code>RetryPolicy</code>. Pydantic AI went from 0 to 4 once its note was left out.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">Switching models</span>
+<h2>What to tune</h2></div>
+<pre><span class="cmd">$ python3 read_results.py tune</span>
+gemini-3.6-flash, whitebox, hard bugs, once each
+Most tokens a reply may use     Fixed  No reply at all     Cost
+1024                             6/10             2       0.097
+8192                            10/10             0       0.221
+Changed the tests at 8192: 6 runs, every one by adding tests.</pre>
+<figure><img src="media/06-tune.jpg" alt="Flash 3.6 fixes 6 of 10 at 1,024 tokens and 10 of 10 at 8,192" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>Gemini 3.6 Flash thinks before it answers, and its thinking counts against the reply limit. At chapter 34's 1,024 tokens it fixed 6 of 10, with replies that never came or were cut off. At 8,192, all ten. A setting that suits one model can quietly break another.</p></div>
+</section>
+<section>
+<div class="col"><span class="label">The point</span>
+<h2>How to choose a framework</h2></div>
+<div class="col"><ol class="list"><li><strong>Make it fail on purpose,</strong> one fault at a time, and write down what it does.</li><li><strong>Look at what it sends,</strong> and compare it with what you wrote.</li><li><strong>Read its defaults:</strong> retries, limits, and what happens to a tool's error.</li><li><strong>Count what it installs,</strong> and pin the version you tested.</li><li><strong>Run your own eval,</strong> on your own model, before and after any change.</li></ol></div>
+</section>
+<section>
+<div class="col"><span class="label">Your turn</span>
+<h2>Exercises</h2></div>
+<div class="col"><p>Open <code>exercises.py</code> and complete the five TODOs: <code>check_arguments</code>, <code>retry_once</code>, <code>Script</code>, <code>added_messages</code> and <code>scores</code>. Then run <code>python3 -m pytest test_exercises.py</code> from that folder. They need neither Ollama, Docker nor the frameworks.</p></div>
+<pre><span class="cmd">$ python3 -m pytest test_exercises.py</span>
+FAILED test_exercises.py::test_todo_1_check_arguments - assert None == &quot;days ...
+FAILED test_exercises.py::test_todo_2_retry_once - AssertionError: assert Non...
+FAILED test_exercises.py::test_todo_3_script - AttributeError: &#x27;NoneType&#x27; obj...
+FAILED test_exercises.py::test_todo_4_added_messages - AssertionError: assert...
+FAILED test_exercises.py::test_todo_5_scores - AssertionError: assert None ==...
+5 failed in 0.08s</pre>
+<figure><img src="media/07-exercises.jpg" alt="All five checks fail before you start" loading="lazy" width="1440" height="900"></figure>
+<div class="col"><p>You've finished when you see <code>5 passed</code>. Worked answers are in <code>solutions/exercises.py</code>.</p></div>
+</section>
+<section>
+<div class="col">
+<span class="label">Recap</span>
+<h2>What you opened</h2>
+<ul class="list"><li>The same coding agent took 8 lines in whitebox, 28 in LangGraph and 35 in Pydantic AI. Most extra lines fixed a default.</li><li>With the same model, the three scored alike: 9, 9 and 9 of 10 on Flash-Lite.</li><li>No framework handled every scripted fault.</li><li>A token limit Ollama ignored stalled a run for 20 minutes, and a note Pydantic AI added led 14B to invent a bug report.</li><li>Flash 3.6 fixed 6 of 10 with chapter 34's reply limit, and 10 of 10 with a bigger one.</li></ul>
+<p>A framework saves you writing a loop. It doesn't save you understanding one.</p>
+<p>These counts come from one Mac and the runs on 8 and 9 November 2026, and any of them could change. The details are in the <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/chapters/35-real-world-frameworks">chapter’s README</a>.</p>
+</div>
+<div class="next"><span>Next</span><h3>Finish the Part 8 checkpoint, then build your own project</h3></div>
+</section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>
