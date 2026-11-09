@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Inference Internals | Whitebox Academy</title>
+<meta name="description" content="Coming soon, and free. Run a real model, Qwen2.5, with your own numpy code, one token at a time, and see what happens inside an LLM. No training and no GPU.">
+<meta property="og:title" content="LLM Inference Internals">
+<meta property="og:description" content="Coming soon. Run a real model with your own code, one token at a time.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/llm-inference-internals/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Whitebox Academy">
+<meta property="og:image" content="https://whiteboxacademy.in/assets/og/whitebox.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Whitebox Academy: Open the black box.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/llm-inference-internals/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": "LLM Inference Internals",
+  "description": "Run a real model, Qwen2.5, with your own numpy code, one token at a time, and see what happens inside an LLM. No training and no GPU.",
+  "url": "https://whiteboxacademy.in/courses/llm-inference-internals/",
+  "inLanguage": "en",
+  "isAccessibleForFree": true,
+  "provider": {
+    "@type": "Organization",
+    "name": "Whitebox Academy",
+    "url": "https://whiteboxacademy.in/"
+  }
+}
+</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Course">
+      <a href="#outcomes">What you’ll do</a>
+      <a href="#curriculum">Curriculum</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="course-hero grid-bg">
+    <div class="wrap">
+      <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/#courses">Courses</a><span>/</span><span>LLM Inference Internals</span></nav>
+      <div class="course-hero-grid with-figure">
+        <div class="course-hero-copy">
+          <div class="tags"><span class="tag hot">Coming soon</span><span class="tag">Course 02</span><span class="tag">Free</span></div>
+          <h1>LLM Inference<br>Internals</h1>
+          <p class="subtitle">Run a real model with your own code, one token at a time.</p>
+          <p class="lede">You’ve called a model. Now open it. Load Qwen2.5’s real weights into numpy, push three words through its 24 layers, and watch the fourth one come out. No training, and no GPU.</p>
+          <form class="signup" data-signup method="post" hidden>
+            <label for="course-email">Email me when it starts</label>
+            <div class="signup-row">
+              <input id="course-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+              <button type="submit">Notify me</button>
+            </div>
+          </form>
+          <div class="actions">
+            <a class="button solid" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+            <a class="text-link" href="/courses/build-an-ai-agent/">New to LLMs? Start with Course 01 →</a>
+          </div>
+        </div>
+
+        <figure class="tokens-fig" data-motion aria-labelledby="tokens-caption">
+          <figcaption id="tokens-caption" class="fig-head"><span>ONE TOKEN AT A TIME</span><small>ILLUSTRATIVE ODDS</small><button class="pause" type="button" data-pause aria-pressed="false" hidden>Pause</button></figcaption>
+          <p class="sr-only">The tokens The, cat and sat go into the model together. It scores every possible next token, and “on” is picked and added. Then only the new token goes through the model, reusing saved work from the KV cache, and “the” is picked next.</p>
+
+          <div aria-hidden="true">
+            <span class="row-label">TOKENS</span>
+            <div class="chips"><span class="chip old">The</span><span class="chip old">cat</span><span class="chip old">sat</span><span class="chip new on">on</span><span class="chip new later">the</span></div>
+          </div>
+
+          <div class="model-box" aria-hidden="true">
+            <ol>
+              <li>words → numbers</li>
+              <li>layer 1 · attention + MLP</li>
+              <li>layer 2</li>
+              <li>⋮</li>
+              <li>layer 24</li>
+              <li>score every next token</li>
+            </ol>
+            <span class="scan"></span>
+          </div>
+
+          <div aria-hidden="true">
+            <span class="row-label">NEXT-TOKEN ODDS</span>
+            <div class="odds">
+              <div class="odds-a">
+                <div class="bar"><span>on</span><span class="track"><i class="top" style="width: 41%"></i></span><span>41%</span></div>
+                <div class="bar"><span>down</span><span class="track"><i style="width: 22%"></i></span><span>22%</span></div>
+                <div class="bar"><span>there</span><span class="track"><i style="width: 9%"></i></span><span>9%</span></div>
+                <span class="picked">↑ picked: “on”</span>
+              </div>
+              <div class="odds-b later">
+                <div class="bar"><span>the</span><span class="track"><i class="top" style="width: 58%"></i></span><span>58%</span></div>
+                <div class="bar"><span>a</span><span class="track"><i style="width: 17%"></i></span><span>17%</span></div>
+                <div class="bar"><span>my</span><span class="track"><i style="width: 6%"></i></span><span>6%</span></div>
+                <span class="picked">↑ picked: “the”</span>
+              </div>
+            </div>
+          </div>
+
+          <div aria-hidden="true">
+            <span class="row-label">KV CACHE · SAVED WORK, ONE SLOT PER TOKEN</span>
+            <div class="kv"><span class="full a"></span><span class="full a"></span><span class="full a"></span><span class="full b"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span><span class="empty"></span></div>
+          </div>
+
+          <div class="captions" aria-hidden="true">
+            <span class="still">Prompt in, one next token out, then repeat.</span>
+            <span class="c1">1 · The prompt goes in, all three tokens at once.</span>
+            <span class="c2">2 · Pick one next token from the odds.</span>
+            <span class="c3">3 · Go again with only the new token. The cache keeps the rest.</span>
+            <span class="c4">… and so on, one token at a time.</span>
+          </div>
+        </figure>
+      </div>
+
+      <dl class="facts">
+        <div><dt>CHAPTERS</dt><dd>18 in 5 parts (planned)</dd></div>
+        <div><dt>TIME</dt><dd>~35 hours, self-paced</dd></div>
+        <div><dt>YOU NEED</dt><dd>Python + Course 01, Part 1</dd></div>
+        <div><dt>RUNS ON</dt><dd>Your laptop, 8 GB, no GPU</dd></div>
+        <div><dt>TOOLS</dt><dd>numpy and Ollama</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section wrap" id="outcomes">
+    <div class="section-head reveal">
+      <div class="eyebrow">What you’ll do</div>
+      <h2>Run a real model,<br>by hand.</h2>
+    </div>
+    <div class="outcomes reveal">
+      <div><span>PART 1</span><h3>Watch from outside</h3><p>Measure what Ollama does when you press Enter: reading the prompt, then writing the reply.</p></div>
+      <div><span>PART 2</span><h3>Build it in numpy</h3><p>Load the weights, then write attention, positions and the full stack until the next token comes out.</p></div>
+      <div><span>PART 3</span><h3>Choose and speed up</h3><p>Temperature by hand, the KV cache, and shrinking the weights without breaking the model.</p></div>
+      <div class="dark"><span>PART 4 · CAPSTONE</span><h3>Watch it think</h3><p>Draw what each word attends to, see the guess form layer by layer, and trace a sentence of your own.</p></div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap">
+      <div class="versus-head reveal">
+        <div class="eyebrow">What “inference” means</div>
+        <h2>Training makes the model.<br>Inference runs it.</h2>
+      </div>
+      <div class="steps two reveal">
+        <div><span>NOT IN THIS COURSE</span><h3>Training</h3><p>Learns the model’s weights from huge amounts of text. Many GPUs, weeks of work, done once.</p></div>
+        <div><span class="label-hot">EVERY CHAPTER</span><h3>Inference</h3><p>Uses those weights. Your text goes in, a score for every next token comes out, one is picked, and it repeats. Every model call you’ve made was inference.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wash">
+    <div class="wrap fit">
+      <div class="reveal">
+        <div class="eyebrow">Is this for you?</div>
+        <h2>If you’ve called a model and wondered what happens next, start here.</h2>
+      </div>
+      <ul class="reveal">
+        <li><b>YES</b><span>You use LLMs and want to see what happens between your prompt and the reply.</span></li>
+        <li><b>YES</b><span>You know Python, and you’ve done <a href="/courses/build-an-ai-agent/#curriculum">Course 01</a>’s Part 1: your first model call, how LLMs work, and prompting.</span></li>
+        <li><b>NO</b><span>A GPU, or a maths background. Each formula arrives when it explains something you just measured.</span></li>
+        <li><b>TIP</b><span>Never used numpy? Part 0 has a short primer on arrays and shapes.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section wrap" id="curriculum">
+    <div class="split-head reveal">
+      <div>
+        <div class="eyebrow">Curriculum</div>
+        <h2>5 parts, from outside<br>to inside.</h2>
+      </div>
+      <span class="note">Planned. Titles may change.</span>
+    </div>
+    <ol class="parts">
+      <li class="reveal"><span class="part-number">00</span><div><h3>Setup and a numpy primer</h3><p>Get the model, and just enough numpy to build with it.</p><ol class="chapter-list">
+        <li>00 Setup</li>
+        <li>01 Numpy primer: arrays, shapes and matrix multiply</li>
+      </ol></div><span class="status">Planned</span></li>
+      <li class="reveal"><span class="part-number">01</span><div><h3>Watch from outside</h3><p>Measure what Ollama does, before opening anything.</p><ol class="chapter-list">
+        <li>02 Three words in, the fourth out</li>
+        <li>03 Reading the prompt versus writing the reply</li>
+        <li>04 Why bigger models are slower, and context costs memory</li>
+      </ol></div><span class="status">Planned</span></li>
+      <li class="reveal"><span class="part-number">02</span><div><h3>Build it in numpy</h3><p>Rebuild the model from its real weights, one piece at a time.</p><ol class="chapter-list">
+        <li>05 Weights are just arrays</li>
+        <li>06 Words to numbers: tokens and embeddings</li>
+        <li>07 Attention: each word looks back</li>
+        <li>08 Position: how the model knows word order</li>
+        <li>09 The full stack: 24 layers to next-token scores</li>
+        <li>10 Generate: the next-token loop</li>
+      </ol></div><span class="status">Planned</span></li>
+      <li class="reveal"><span class="part-number">03</span><div><h3>Choose and speed up</h3><p>Pick tokens your way, and make the loop fast and small.</p><ol class="chapter-list">
+        <li>11 Temperature, top-k and top-p by hand</li>
+        <li>12 The KV cache</li>
+        <li>13 Quantization: shrinking the weights</li>
+        <li>14 Perplexity: did shrinking hurt?</li>
+      </ol></div><span class="status">Planned</span></li>
+      <li class="reveal"><span class="part-number">04</span><div><h3>Watch it think</h3><p>See inside the model while it works.</p><ol class="chapter-list">
+        <li>15 Attention maps</li>
+        <li>16 The logit lens: the guess after every layer</li>
+        <li>17 Capstone: trace your own sentence</li>
+      </ol></div><span class="status">Planned</span></li>
+    </ol>
+  </section>
+
+  <section class="section wrap faq" id="faq">
+    <div class="section-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Questions before you start</h2>
+    </div>
+    <div class="faq-list">
+      <details><summary>Is this about training a model?</summary><p>No. You take a model that is already trained, Qwen2.5, and run it with your own code. Nothing in this course changes the weights.</p></details>
+      <details><summary>Do I need a GPU?</summary><p>No. Everything runs on your own computer with at least 8 GB of memory. The model is small, about half a billion numbers, so numpy can run it.</p></details>
+      <details><summary>Do I need to finish Course 01 first?</summary><p>Only its Part 1: your first model call, how LLMs work, and prompting. Those three chapters set up the words and ideas this course opens up.</p></details>
+      <details><summary>Why numpy and not PyTorch?</summary><p>So nothing is hidden. Every step is a plain array you can print, check and change, and the install stays small.</p></details>
+      <details><summary>Will I build something like Ollama?</summary><p>No. There’s no server or app. The goal is to understand what happens inside the model, and you use Ollama as the yardstick to check your own code against.</p></details>
+      <details><summary>How much maths is there?</summary><p>Only what explains something you just saw. You measure first, then the formula arrives, and it’s always written as numpy code too.</p></details>
+      <details><summary>When does it start?</summary><p>We’re building it now. Follow the YouTube channel to hear when Part 0 is out.</p></details>
+    </div>
+  </section>
+
+  <section class="closing dark grid-bg" id="follow">
+    <div class="wrap">
+      <h2>Open the model.</h2>
+      <p class="lede">We’re building this course now. Follow along to hear when the first part is out, and start <a href="/courses/build-an-ai-agent/">Course 01</a> in the meantime.</p>
+      <form class="signup" data-signup method="post" hidden>
+        <label for="end-email">Your email</label>
+        <div class="signup-row">
+          <input id="end-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <button type="submit">Notify me</button>
+        </div>
+      </form>
+      <div class="actions">
+        <a class="button hot" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube ↗</a>
+        <a class="button" href="/courses/build-an-ai-agent/">Start Course 01</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+
+<div class="sticky-cta">
+  <span><strong>LLM Inference Internals.</strong> Coming soon, free.</span>
+  <a href="https://www.youtube.com/@WhiteboxAcademy">Follow</a>
+</div>
+</body>
+</html>

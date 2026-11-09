@@ -23,6 +23,17 @@ function setMenu(open) {
 }
 
 menuButton.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
+
+// Looping animations each have a Pause button, so nothing has to keep moving.
+document.querySelectorAll("[data-pause]").forEach((button) => {
+  const figure = button.closest("[data-motion]");
+  button.hidden = false;
+  button.addEventListener("click", () => {
+    const paused = figure.classList.toggle("is-paused");
+    button.setAttribute("aria-pressed", String(paused));
+    button.textContent = paused ? "Play" : "Pause";
+  });
+});
 nav.addEventListener("click", (event) => {
   if (event.target.closest("a")) setMenu(false);
 });
