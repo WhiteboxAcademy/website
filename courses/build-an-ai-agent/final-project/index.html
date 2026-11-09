@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your final project | Whitebox Academy</title>
+<meta name="description" content="Roll for your final project: your name, the time and two dice pick one of 58 agent ideas, each with a harder version and the twists that fit it.">
+<meta property="og:title" content="Roll for your final project">
+<meta property="og:description" content="Roll for your final project: your name, the time and two dice pick one of 58 agent ideas, each with a harder version and the twists that fit it.">
+<meta property="og:url" content="https://whiteboxacademy.in/courses/build-an-ai-agent/final-project/">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://whiteboxacademy.in/courses/build-an-ai-agent/final-project/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/final-project.css">
+<script>document.documentElement.classList.add("js")</script>
+<script src="/assets/site.js" defer></script>
+<script src="/assets/final-project.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/"><i></i>Whitebox Academy</a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav class="site-nav" id="site-nav" aria-label="Final project">
+      <a href="/courses/build-an-ai-agent/">Course</a>
+      <a href="/courses/build-an-ai-agent/#curriculum">Curriculum</a>
+      <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/tree/main/final-project">Code</a>
+      <a class="nav-cta" href="https://www.youtube.com/@WhiteboxAcademy">Follow on YouTube</a>
+    </nav>
+  </div>
+</header>
+
+<main class="fp">
+  <section class="fp-hero grid-bg">
+    <div class="wrap">
+      <nav class="fp-crumbs" aria-label="Breadcrumb"><a href="/courses/build-an-ai-agent/">Build an AI Agent from Scratch</a><span>/</span><span>Final project</span></nav>
+      <div class="fp-tags"><span class="hot">FINAL PROJECT</span><span>AFTER THE PART 8 CHECKPOINT</span></div>
+      <h1>Roll for your<br>next build.</h1>
+      <p class="fp-lede">You’ve built an agent framework and a coding agent. Now build something of your own. Add your name, pick a level and roll two dice, and you’ll get one of <span data-total>58</span> project ideas, each with a harder version and the twists that fit it.</p>
+    </div>
+  </section>
+
+  <section class="wrap fp-roll">
+    <form class="fp-card" id="roll-form" novalidate>
+      <div class="fp-field">
+        <label class="fp-label" for="learner-name">YOUR NAME</label>
+        <input id="learner-name" type="text" autocomplete="name" placeholder="e.g. Asha Rao" aria-describedby="name-msg">
+        <span class="fp-msg" id="name-msg">Your name is part of the roll, with the time and the dice.</span>
+      </div>
+
+      <fieldset class="fp-field">
+        <legend class="fp-label">LEVEL</legend>
+        <div class="fp-seg" id="levels"></div>
+        <span class="fp-msg" id="level-msg"></span>
+      </fieldset>
+
+      <div class="fp-dice" id="dice">
+        <div class="fp-die-wrap">
+          <button type="button" class="fp-diebtn" data-die="a" aria-label="Roll the dice. First die not rolled yet"><span class="fp-die fp-die-a"></span></button>
+          <span class="fp-die-cap">FIRST</span>
+        </div>
+        <span class="fp-plus" aria-hidden="true">+</span>
+        <div class="fp-die-wrap">
+          <button type="button" class="fp-diebtn" data-die="b" aria-label="Roll the dice. Second die not rolled yet"><span class="fp-die fp-die-b"></span></button>
+          <span class="fp-die-cap">SECOND</span>
+        </div>
+      </div>
+      <p class="fp-dice-cap" id="dice-cap" aria-hidden="true">CLICK EITHER DIE TO ROLL</p>
+
+      <button type="submit" class="fp-go" id="roll-button">Roll the dice</button>
+
+      <details class="fp-replay" id="replay">
+        <summary>Use your own dice, or replay a roll</summary>
+        <p>Rolling real dice at your desk? Set them here. To see an earlier roll again, add its time as well.</p>
+        <div class="fp-replay-grid">
+          <div class="fp-field fp-span">
+            <label class="fp-label" for="roll-time">ROLL TIME (UTC, OPTIONAL)</label>
+            <input id="roll-time" class="fp-mono" type="text" spellcheck="false" autocomplete="off" placeholder="2026-11-09T14:32:07Z" aria-describedby="time-msg">
+            <span class="fp-msg" id="time-msg">Leave it empty to use the time now.</span>
+          </div>
+          <div class="fp-field">
+            <label class="fp-label" for="die-a">FIRST DIE</label>
+            <select id="die-a"><option value="">Roll it</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+          </div>
+          <div class="fp-field">
+            <label class="fp-label" for="die-b">SECOND DIE</label>
+            <select id="die-b"><option value="">Roll it</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+          </div>
+        </div>
+      </details>
+    </form>
+
+    <div class="fp-how">
+      <span class="fp-eyebrow">NO BLACK BOX HERE</span>
+      <h2>How your idea is picked</h2>
+      <p>Your name, the second you rolled and both dice go through SHA-256. The first four bytes pick an idea from your level. Every second gives a different roll, and the result shows its time, so anyone can see the same roll again and check it.</p>
+      <div class="fp-calc" id="calc"></div>
+      <p class="fp-small">The same sum runs in <code>roll.py</code> in the course code, so you can check any roll on your own machine. Nothing on this page is sent anywhere.</p>
+    </div>
+  </section>
+
+  <section class="wrap fp-result-wrap" aria-live="polite" id="result-region">
+    <div class="fp-empty" id="empty">Your project idea appears here after you roll.</div>
+    <article class="fp-result" id="result" hidden>
+      <div class="fp-result-top">
+        <span id="r-owner"></span>
+        <span class="fp-badges"><span class="hot" id="r-number"></span><span id="r-level"></span></span>
+      </div>
+      <p class="fp-group" id="r-group"></p>
+      <h2 id="r-title" tabindex="-1"></h2>
+      <p class="fp-what" id="r-what"></p>
+      <dl class="fp-facts">
+        <div><dt>Builds on</dt><dd id="r-builds"></dd></div>
+        <div><dt>Your eval could check</dt><dd id="r-eval"></dd></div>
+        <div class="fp-harder"><dt>Harder version</dt><dd id="r-harder"></dd></div>
+      </dl>
+      <div class="fp-twists">
+        <h3>Twists that fit it</h3>
+        <p>How your agent behaves, not what it does. Take one, several, or none.</p>
+        <ol id="r-twists"></ol>
+      </div>
+      <p class="fp-rolled" id="r-rolled"></p>
+      <div class="fp-field">
+        <span class="fp-label">SEE THIS ROLL AGAIN</span>
+        <div class="fp-cmd"><code id="r-command"></code><button type="button" id="copy-command">Copy</button></div>
+      </div>
+
+      <div class="fp-record">
+        <label class="fp-check"><input type="checkbox" id="record"> <span>Record my roll in the course Discussions</span></label>
+        <div class="fp-record-body" id="record-body" hidden>
+          <p>Start a discussion for your project, then reply to it when you’ve built something. The page never posts anything. You post from your own GitHub account, and only if you want to.</p>
+          <pre class="fp-entry" id="r-entry"></pre>
+          <div class="fp-actions"><a class="fp-btn solid" id="post-roll" href="#" target="_blank" rel="noopener">Post it on GitHub ↗</a><button type="button" class="fp-btn" id="copy-roll">Copy entry</button></div>
+        </div>
+      </div>
+
+      <div class="fp-actions">
+        <a class="fp-btn solid" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework">Start from the course code ↗</a>
+        <button type="button" class="fp-btn" id="roll-again">Roll again</button>
+      </div>
+    </article>
+  </section>
+
+  <section class="wrap fp-more">
+    <details class="fp-own" id="own">
+      <summary><span class="fp-eyebrow">YOUR OWN IDEA</span><span class="fp-own-title">Have your own idea? Describe it and share it.</span></summary>
+      <form class="fp-own-form" id="own-form" novalidate>
+        <p>Describe it the way the course’s ideas are described. Only the name and what it does are needed.</p>
+        <div class="fp-field"><label class="fp-label" for="o-name">NAME OF YOUR IDEA</label><input id="o-name" type="text" placeholder="e.g. Recipe scaler"></div>
+        <div class="fp-field"><label class="fp-label" for="o-what">WHAT IT DOES</label><textarea id="o-what" rows="3"></textarea></div>
+        <div class="fp-field"><label class="fp-label" for="o-harder">HARDER VERSION</label><textarea id="o-harder" rows="2" placeholder="A real improvement to build once the first version works"></textarea></div>
+        <div class="fp-field"><label class="fp-label" for="o-builds">CHAPTERS IT BUILDS ON</label><input id="o-builds" type="text" placeholder="e.g. Tools 14, memory 25"></div>
+        <div class="fp-field"><label class="fp-label" for="o-eval">WHAT YOUR EVAL WILL CHECK</label><textarea id="o-eval" rows="2"></textarea></div>
+        <div class="fp-field"><label class="fp-label" for="o-level">LEVEL</label><select id="o-level"><option value="">Not sure</option><option value="starter">Starter</option><option value="intermediate">Intermediate</option><option value="advanced">Advanced</option></select></div>
+        <span class="fp-msg" id="own-msg">The page never posts anything. You post from your own GitHub account.</span>
+        <div class="fp-actions"><a class="fp-btn solid" id="post-own" href="#" target="_blank" rel="noopener">Post it on GitHub ↗</a><button type="button" class="fp-btn" id="copy-own">Copy entry</button></div>
+      </form>
+    </details>
+
+    <div class="fp-rules">
+      <span class="fp-eyebrow">THE RULES</span>
+      <ul>
+        <li><strong>A weekend’s work.</strong> Small and finished beats big and half-done.</li>
+        <li><strong>Works on <code>qwen2.5:7b</code>,</strong> so anyone can run it for free. A cloud model is fine as well.</li>
+        <li><strong>Free:</strong> no paid service and no sign-up.</li>
+        <li><strong>No one else’s personal data.</strong> Use your own, or make some up.</li>
+        <li><strong>Any framework from the course:</strong> whitebox, LangGraph or Pydantic AI.</li>
+        <li><strong>Write an eval,</strong> and report what your agent used: tokens and time, and cost on a cloud model.</li>
+      </ul>
+      <p class="fp-small">Rolling is part of the fun, so this page shows only your idea. The list isn’t secret: all of them are in <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/blob/main/final-project/projects.json">projects.json</a>, if you’d rather choose.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© 2026 Whitebox Academy · Code MIT · Articles &amp; videos CC BY 4.0</span>
+    <nav aria-label="Footer">
+      <a href="/courses/build-an-ai-agent/">Back to the course</a>
+      <a href="https://www.youtube.com/@WhiteboxAcademy">YouTube</a>
+      <a href="https://github.com/WhiteboxAcademy">GitHub</a>
+    </nav>
+  </div>
+</footer>
+</body>
+</html>

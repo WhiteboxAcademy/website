@@ -1,0 +1,156 @@
+/* The final-project roll page. Values follow design/Bonus-Dice.dc.html. */
+.fp code { font: 500 0.9em var(--mono); background: var(--wash); padding: 1px 5px; }
+.fp-label, .fp-eyebrow, .fp-die-cap, .fp-dice-cap { font: 500 12px/1.4 var(--mono); letter-spacing: 0.06em; }
+.fp-eyebrow { display: flex; align-items: center; gap: 10px; letter-spacing: 0.08em; }
+.fp-eyebrow::before { content: ""; width: 10px; height: 10px; background: var(--accent); }
+.fp-small { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.fp-msg { font-size: 14px; color: var(--muted); }
+.fp-msg.error { color: #b42318; font-weight: 600; }
+.fp-mono { font-family: var(--mono) !important; }
+
+/* Hero */
+.fp-hero { border-bottom: 1px solid var(--rule); }
+.fp-hero .wrap { padding-block: 32px 72px; }
+.fp-crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 48px; font: 400 13px/1.4 var(--mono); }
+.fp-crumbs > * { padding-block: 8px; }
+.fp-crumbs span { color: var(--muted); }
+.fp-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; font: 500 12px/1.4 var(--mono); }
+.fp-tags span { padding: 5px 9px; border: 1px solid var(--ink); background: var(--paper); }
+.fp-tags .hot, .fp-badges .hot { background: var(--accent); border-color: var(--accent); font-weight: 700; }
+.fp-hero h1 { margin: 0 0 20px; font-size: clamp(48px, 6.2vw, 92px); line-height: 0.95; font-weight: 800; letter-spacing: -0.045em; }
+.fp-lede { margin: 0; max-width: 660px; font-size: 20px; line-height: 1.5; color: var(--muted); }
+
+/* Roll card and explanation */
+.fp-roll { display: flex; flex-wrap: wrap; gap: 40px; align-items: flex-start; padding-block: 72px 40px; }
+.fp-card { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 28px; padding: 36px; border: 1.5px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); background: var(--paper); }
+.fp-field { display: flex; flex-direction: column; gap: 8px; min-width: 0; border: 0; margin: 0; padding: 0; }
+.fp-field legend { padding: 0; margin-bottom: 8px; }
+.fp input[type="text"], .fp select, .fp textarea { width: 100%; min-height: 52px; padding: 0 16px; border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 400 17px/1.4 var(--sans); }
+.fp textarea { padding: 12px 16px; resize: vertical; }
+.fp input::placeholder, .fp textarea::placeholder { color: #6b727c; }
+.fp input.error { border-color: #b42318; }
+.fp-seg { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1.5px solid var(--ink); }
+.fp-seg label { position: relative; display: block; cursor: pointer; }
+.fp-seg label + label span.fp-opt { border-left: 1.5px solid var(--ink); }
+.fp-seg input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.fp-opt { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 56px; padding: 6px; text-align: center; }
+.fp-opt b { font-size: 15px; }
+.fp-opt small { font: 400 11px/1.3 var(--mono); }
+.fp-seg input:checked + .fp-opt { background: var(--ink); color: var(--paper); }
+.fp-seg input:focus-visible + .fp-opt { outline: 3px solid var(--accent); outline-offset: 3px; position: relative; z-index: 1; }
+
+.fp-dice { display: flex; gap: 28px; align-items: flex-end; justify-content: center; padding-top: 8px; }
+.fp-die-wrap { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.fp-die-cap, .fp-dice-cap { color: var(--muted); letter-spacing: 0.08em; }
+.fp-dice-cap { margin: -14px 0 0; text-align: center; }
+.fp-plus { padding-bottom: 64px; font: 700 28px/1 var(--mono); }
+.fp-diebtn { padding: 0; border: 0; background: none; border-radius: 16px; cursor: pointer; }
+.fp-diebtn:focus-visible { outline: 3px solid var(--accent); outline-offset: 6px; }
+.fp-die { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 112px; height: 112px; padding: 16px; border: 2px solid var(--ink); border-radius: 16px; background: var(--paper); box-shadow: 5px 5px 0 var(--ink); transition: transform 0.18s ease; }
+.fp-die-b { background: var(--ink); box-shadow: 5px 5px 0 var(--accent); }
+.fp-die i { display: block; width: 18px; height: 18px; margin: auto; border-radius: 50%; background: var(--ink); opacity: 0.08; }
+.fp-die-b i { background: var(--paper); }
+.fp-die[data-face] i { opacity: 0; }
+.fp-die i.on { opacity: 1 !important; }
+.fp-diebtn:hover .fp-die { transform: translate(-2px, -5px) rotate(-5deg); }
+.fp-diebtn:active .fp-die { transform: translate(1px, 1px); }
+@keyframes fpTumble { 0% { transform: rotate(0) translateY(0); } 25% { transform: rotate(-14deg) translateY(-14px); } 50% { transform: rotate(10deg) translateY(0); } 75% { transform: rotate(-6deg) translateY(-6px); } 100% { transform: rotate(0) translateY(0); } }
+.rolling .fp-die { animation: fpTumble 0.36s ease-in-out infinite; }
+.rolling .fp-die-b { animation-delay: -0.12s; }
+
+.fp-go { min-height: 56px; border: 0; background: var(--ink); color: var(--paper); font: 700 17px/1 var(--sans); cursor: pointer; }
+.fp-go:hover { background: #2b2f36; }
+.fp-replay { border-top: 1px solid var(--rule); padding-top: 4px; }
+.fp-replay summary { min-height: 44px; display: flex; align-items: center; font-weight: 600; font-size: 15px; cursor: pointer; }
+.fp-replay p { margin: 4px 0 14px; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.fp-replay-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.fp-span { grid-column: 1 / -1; }
+
+.fp-how { flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+.fp-how h2 { margin: 0; font-size: 32px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; }
+.fp-how > p:not(.fp-small) { margin: 0; font-size: 16px; line-height: 1.5; color: var(--muted); }
+.fp-calc { display: flex; flex-direction: column; gap: 6px; padding: 20px 22px; background: var(--ink); color: var(--paper); font: 400 13px/1.5 var(--mono); }
+.fp-calc div { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 12px; }
+.fp-calc dt { color: var(--on-ink-muted); }
+.fp-calc dd { margin: 0; overflow-wrap: anywhere; }
+.fp-calc.idle dd { color: var(--on-ink-muted); }
+.fp-calc dd.pick { color: #ffb08a; }
+
+/* Result */
+.fp-result-wrap { padding-block: 24px 64px; }
+.fp-empty { padding: 48px 32px; border: 1.5px dashed #6b727c; text-align: center; font: 400 14px/1.5 var(--mono); color: var(--muted); }
+.fp-result { scroll-margin-top: 96px; display: flex; flex-direction: column; gap: 20px; padding: 40px; border: 1.5px solid var(--ink); box-shadow: 8px 8px 0 var(--accent); background: var(--paper); animation: fpPop 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes fpPop { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.fp-result-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font: 500 12px/1.4 var(--mono); letter-spacing: 0.06em; }
+.fp-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.fp-badges span { padding: 3px 8px; border: 1px solid var(--ink); }
+.fp-group { margin: 0 0 -12px; font: 500 13px/1.4 var(--mono); color: var(--muted); }
+.fp-result h2 { margin: 0; font-size: clamp(30px, 3.2vw, 44px); line-height: 1.05; font-weight: 800; letter-spacing: -0.035em; }
+.fp-result h2:focus { outline: none; }
+.fp-what { margin: 0; max-width: 760px; font-size: 18px; line-height: 1.55; color: #3a3f47; }
+.fp-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 0; }
+.fp-facts div { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; background: var(--wash); border-left: 4px solid var(--rule-strong); }
+.fp-facts .fp-harder { border-left-color: var(--accent); }
+.fp-facts dt { font: 500 12px/1.4 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.fp-facts dd { margin: 0; line-height: 1.5; }
+.fp-twists h3 { margin: 0 0 4px; font-size: 20px; letter-spacing: -0.02em; }
+.fp-twists p { margin: 0 0 12px; color: var(--muted); font-size: 15px; }
+.fp-twists ol { list-style: none; margin: 0; padding: 0; border: 1.5px solid var(--ink); }
+.fp-twists li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 8px; padding: 12px 16px; line-height: 1.5; }
+.fp-twists li + li { border-top: 1px solid var(--rule); }
+.fp-twists li b { font-family: var(--mono); }
+.fp-rolled { margin: 0; font: 400 14px/1.5 var(--mono); }
+.fp-cmd { display: flex; flex-wrap: wrap; align-items: stretch; border: 1.5px solid var(--ink); background: var(--wash); }
+.fp-cmd code { flex: 1 1 420px; min-width: 0; padding: 14px 16px; background: none; font: 400 14px/1.5 var(--mono); overflow-wrap: anywhere; user-select: all; }
+.fp-cmd button { min-height: 48px; min-width: 120px; padding: 0 20px; border: 0; border-left: 1.5px solid var(--ink); background: var(--ink); color: var(--paper); font: 700 15px/1 var(--sans); cursor: pointer; }
+.fp-record { padding: 18px 20px; border: 1.5px solid var(--ink); }
+.fp-check { display: flex; align-items: center; gap: 12px; min-height: 44px; font-weight: 600; cursor: pointer; }
+.fp-check input { width: 22px; height: 22px; accent-color: var(--ink); }
+.fp-record-body { display: flex; flex-direction: column; gap: 14px; padding-top: 10px; }
+.fp-record-body p { margin: 0; color: var(--muted); line-height: 1.5; }
+.fp-entry { margin: 0; padding: 14px 16px; background: var(--wash); font: 400 13px/1.6 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.fp-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.fp-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 22px; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); font: 600 16px/1 var(--sans); text-decoration: none; cursor: pointer; }
+.fp-btn:hover { background: var(--wash); color: var(--ink); }
+.fp-btn.solid { background: var(--ink); color: var(--paper); font-weight: 700; }
+.fp-btn.solid:hover { background: #2b2f36; color: var(--paper); }
+.fp-btn[aria-disabled="true"] { opacity: 0.45; pointer-events: none; }
+
+/* Your own idea, and the rules */
+.fp-more { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 40px; align-items: start; padding-block: 24px 112px; }
+.fp-own { border: 1.5px solid var(--ink); }
+.fp-own summary { display: flex; flex-direction: column; gap: 10px; padding: 24px 28px; cursor: pointer; list-style: none; }
+.fp-own summary::-webkit-details-marker { display: none; }
+.fp-own-title { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.fp-own-title::after { content: " +"; color: var(--accent); }
+.fp-own[open] .fp-own-title::after { content: " −"; }
+.fp-own-form { display: flex; flex-direction: column; gap: 18px; padding: 0 28px 28px; }
+.fp-own-form > p { margin: 0; color: var(--muted); }
+.fp-rules { display: flex; flex-direction: column; gap: 14px; }
+.fp-rules ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; line-height: 1.5; }
+.fp-rules li::marker { color: var(--accent); }
+
+@media (max-width: 760px) {
+  .fp-hero .wrap { padding-block: 16px 48px; }
+  .fp-crumbs { margin-bottom: 28px; }
+  .fp-lede { font-size: 18px; }
+  .fp-roll { padding-block: 40px 24px; gap: 32px; }
+  .fp-card { padding: 22px; gap: 24px; box-shadow: 6px 6px 0 var(--ink); }
+  .fp-seg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fp-seg label:nth-child(3) span.fp-opt { border-left: 0; }
+  .fp-seg label:nth-child(n+3) span.fp-opt { border-top: 1.5px solid var(--ink); }
+  .fp-dice { gap: 18px; }
+  .fp-die { width: 96px; height: 96px; padding: 13px; }
+  .fp-die i { width: 15px; height: 15px; }
+  .fp-plus { padding-bottom: 56px; }
+  .fp-result { padding: 22px; box-shadow: 6px 6px 0 var(--accent); }
+  .fp-cmd button { flex: 1 1 100%; border-left: 0; border-top: 1.5px solid var(--ink); }
+  .fp-more { grid-template-columns: minmax(0, 1fr); padding-block: 16px 64px; }
+  .fp-own summary { padding: 20px; }
+  .fp-own-form { padding: 0 20px 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rolling .fp-die, .fp-result { animation: none; }
+  .fp-die, .fp-diebtn:hover .fp-die { transition: none; transform: none; }
+}
