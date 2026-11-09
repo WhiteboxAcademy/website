@@ -126,6 +126,13 @@
 .fp-own[open] .fp-own-title::after { content: " −"; }
 .fp-own-form { display: flex; flex-direction: column; gap: 18px; padding: 0 28px 28px; }
 .fp-own-form > p { margin: 0; color: var(--muted); }
+.fp-side { display: flex; flex-direction: column; gap: 40px; }
+.fp-built { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding: 24px 28px; background: var(--ink); color: var(--paper); }
+.fp-built .fp-eyebrow { color: var(--paper); }
+.fp-built-title { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
+.fp-built p:not(.fp-built-title) { margin: 0; color: var(--on-ink-muted); line-height: 1.5; }
+.fp-built .fp-btn.solid { background: var(--accent); border-color: var(--accent); color: var(--ink); }
+.fp-built .fp-btn.solid:hover { background: #ff6a26; color: var(--ink); }
 .fp-rules { display: flex; flex-direction: column; gap: 14px; }
 .fp-rules ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; line-height: 1.5; }
 .fp-rules li::marker { color: var(--accent); }

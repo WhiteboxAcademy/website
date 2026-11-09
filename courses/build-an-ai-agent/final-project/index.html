@@ -133,7 +133,7 @@
       <div class="fp-record">
         <label class="fp-check"><input type="checkbox" id="record"> <span>Record my roll in the course Discussions</span></label>
         <div class="fp-record-body" id="record-body" hidden>
-          <p>Start a discussion for your project, then reply to it when you’ve built something. The page never posts anything. You post from your own GitHub account, and only if you want to.</p>
+          <p>This starts a discussion for your project in Final projects. When it’s built, show it in Show and tell. The page never posts anything. You post from your own GitHub account, and only if you want to.</p>
           <pre class="fp-entry" id="r-entry"></pre>
           <div class="fp-actions"><a class="fp-btn solid" id="post-roll" href="#" target="_blank" rel="noopener">Post it on GitHub ↗</a><button type="button" class="fp-btn" id="copy-roll">Copy entry</button></div>
         </div>
@@ -162,6 +162,13 @@
       </form>
     </details>
 
+    <div class="fp-side">
+    <div class="fp-built">
+      <span class="fp-eyebrow">BUILT IT?</span>
+      <p class="fp-built-title">Show it in Show and tell.</p>
+      <p>Start a new discussion with a link to your code, your eval and its result, what it used, and what didn’t work. If you recorded your roll or idea, link that discussion too.</p>
+      <a class="fp-btn solid" id="post-built" href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/discussions/new?category=show-and-tell" target="_blank" rel="noopener">Show your build on GitHub ↗</a>
+    </div>
     <div class="fp-rules">
       <span class="fp-eyebrow">THE RULES</span>
       <ul>
@@ -173,6 +180,7 @@
         <li><strong>Write an eval,</strong> and report what your agent used: tokens and time, and cost on a cloud model.</li>
       </ul>
       <p class="fp-small">Rolling is part of the fun, so this page shows only your idea. The list isn’t secret: all of them are in <a href="https://github.com/WhiteboxAcademy/BuildAnAgentFramework/blob/main/final-project/projects.json">projects.json</a>, if you’d rather choose.</p>
+    </div>
     </div>
   </section>
 </main>

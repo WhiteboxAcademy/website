@@ -177,6 +177,7 @@
     const title = `[Final project] ${idea.number}: ${idea.name}`;
     $("r-entry").textContent = `${title}\n\nWhere it comes from: A roll on the course page\nYour roll: ${rollLine}\nTo see it again: ${command}`;
     $("post-roll").href = discussionLink({ title, start: "A roll on the course page", roll: rollLine });
+    $("post-built").href = discussionLink({ category: "show-and-tell", title: `[Built] ${idea.number}: ${idea.name}`, built: `${idea.number}: ${idea.name}` });
     last.command = command;
     $("r-title").focus({ preventScroll: true });
     result.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
