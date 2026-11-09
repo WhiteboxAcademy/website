@@ -175,8 +175,8 @@
     $("r-command").textContent = command;
     const rollLine = `${r.shown} · dice ${r.a} and ${r.b} · ${r.level} · ${r.time} → ${idea.number}: ${idea.name}`;
     const title = `[Final project] ${idea.number}: ${idea.name}`;
-    $("r-entry").textContent = `${title}\n\nWhere it comes from: A roll on the course page\nYour roll: ${rollLine}\nTo see it again: ${command}`;
-    $("post-roll").href = discussionLink({ title, start: "A roll on the course page", roll: rollLine });
+    $("r-entry").textContent = `${title}\n\nYour roll: ${rollLine}\nTo see it again: ${command}`;
+    $("post-roll").href = discussionLink({ title, roll: rollLine });
     $("post-built").href = discussionLink({ category: "show-and-tell", title: `[Built] ${idea.number}: ${idea.name}`, built: `${idea.number}: ${idea.name}` });
     last.command = command;
     $("r-title").focus({ preventScroll: true });
@@ -189,16 +189,17 @@
     const name = v("o-name");
     const lines = [["What it does", v("o-what")], ["Harder version", v("o-harder")], ["Builds on", v("o-builds")],
       ["Eval", v("o-eval")], ["Level", v("o-level") ? cap(v("o-level")) : ""]].filter(([, text]) => text);
-    const idea = [name, ...lines.map(([k, text]) => `${k}: ${text}`)].join("\n");
-    return { ready: name !== "" && v("o-what") !== "", title: `[Final project] My own idea: ${name}`, idea };
+    const body = [`An idea for a final project in Build an AI Agent from Scratch.`, "",
+      ...lines.map(([k, text]) => `**${k}:** ${text}`)].join("\n");
+    return { ready: name !== "" && v("o-what") !== "", title: `[Final project idea] ${name}`, body };
   }
   function updateOwn() {
     const e = ownEntry();
     const post = $("post-own");
     post.setAttribute("aria-disabled", String(!e.ready));
-    post.href = e.ready ? discussionLink({ title: e.title, start: "My own idea", idea: e.idea }) : "#";
+    post.href = e.ready ? discussionLink({ category: "ideas", title: e.title, body: e.body }) : "#";
     $("own-msg").classList.remove("error");
-    $("own-msg").textContent = "The page never posts anything. You post from your own GitHub account.";
+    $("own-msg").textContent = "This starts a discussion in Ideas. The page never posts anything. You post from your own GitHub account.";
   }
 
   // ---- Wiring ----
@@ -230,7 +231,7 @@
         $("own-msg").textContent = "Add a name and what it does first.";
         return;
       }
-      copy(`${e.title}\n\nWhere it comes from: My own idea\n${e.idea}`, event.currentTarget);
+      copy(`${e.title}\n\n${e.body}`, event.currentTarget);
     });
     updateOwn();
   }
