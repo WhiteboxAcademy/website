@@ -22,7 +22,11 @@ document.querySelectorAll("[data-progress-label]").forEach((el) => {
   el.textContent = label;
 });
 document.querySelectorAll("[data-next]").forEach((el) => {
-  el.textContent = next;
+  if (nextPart) {
+    el.textContent = next;
+  } else {
+    el.parentElement.textContent = `All ${parts.length} parts are released.`;  // the whole "Up next: ..." sentence
+  }
 });
 
 const bar = document.querySelector("[data-progress-bar]");
